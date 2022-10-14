@@ -17,6 +17,9 @@
             </p>
         </div>
 
+
+
+
         <div class="h_wwc">
             <h2>Что умеет "Турист.ру"?</h2>
             <ul>
@@ -29,6 +32,11 @@
 </template>
 
 <script>
+
+import AOS from 'aos';
+
+AOS.init();
+
 export default {
     name: "HomeView"
 }

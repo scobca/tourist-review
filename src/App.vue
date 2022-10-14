@@ -12,6 +12,7 @@
 
 body {
     background: black;
+    height: 200vh;
 }
 
 .header {
