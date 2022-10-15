@@ -116,13 +116,4 @@ a:hover {
     color: var(--accent)
 }
 
-.header__menu {
-    transform: translateX(100%);
-    transition: all .3s;
-}
-
-.header__menu_show {
-    transform: translateX(0);
-}
-
 </style>

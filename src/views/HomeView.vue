@@ -4,14 +4,18 @@
     <section class="welcome">
         <div class="welcome__container container">
 
-            <h1 class="welcome__title"> Что такое "Турист.ру"? </h1>
+            <div class="welcome__content">
+                <h1 class="welcome__title"> Что такое "Турист.ру"? </h1>
+                <p class="welcome__about"> Приложение о Санкт-Петербурге, делящееся актуальными мероприятиями, событиями дня, гибкими маршрутами, экскурсиями и различным жильем. </p>
+                <router-link class="welcome__start btn" :to="{ name: 'map' }"> Начать путешествия </router-link>
+            </div>
 
-            <p class="welcome__about">
-                Приложение о Санкт-Петербурге, делящееся актуальными мероприятиями, событиями дня, гибкими маршрутами, экскурсиями и различным жильем.
-            </p>
-
-            <router-link class="welcome__start btn" :to="{ name: 'map' }"> Начать путешествия </router-link>
-
+            <div class="welcome__illustrations" data-aos="fade-up" data-aos-duration="700">
+                <img src="@/assets/img/logo.svg" alt="" class="welcome__illustration">
+                <img src="@/assets/img/logo.svg" alt=""  data-aos="fade-up" data-aos-duration="700" class="welcome__illustration">
+            </div>
+            
+            
         </div>
     </section>
 
@@ -24,14 +28,14 @@
                     Популярные маршруты
                 </h2>
                 <ul class="recommendations__list">
-                    <li class="recommendations__item recommendation">
+                    <li class="recommendations__item recommendation" data-aos="zoom-in">
                         <img src="@/assets/img/kazan.jpg" alt="" class="recommendation__image">
                     </li>
                     <li class="recommendations__item recommendation">
-                        <img src="@/assets/img/petergof.jpg" alt="" class="recommendation__image">
+                        <img src="@/assets/img/petergof.jpg" alt=""  data-aos="zoom-in" class="recommendation__image">
                     </li>
                     <li class="recommendations__item recommendation">
-                        <img src="@/assets/img/ermitaj.jpg" alt="" class="recommendation__image">
+                        <img src="@/assets/img/ermitaj.jpg" alt=""  data-aos="zoom-in" class="recommendation__image">
                     </li>
                 </ul>
             </section>
@@ -43,13 +47,13 @@
                 </h2>
                 <ul class="recommendations__list">
                     <li class="recommendations__item recommendation">
-                        <img src="@/assets/img/model.webp" alt="" class="recommendation__image">
+                        <img src="@/assets/img/model.webp" alt="" data-aos="zoom-in" class="recommendation__image">
                     </li>
                     <li class="recommendations__item recommendation">
-                        <img src="@/assets/img/house.webp" alt="" class="recommendation__image">
+                        <img src="@/assets/img/house.webp" alt="" data-aos="zoom-in" class="recommendation__image">
                     </li>
                     <li class="recommendations__item recommendation">
-                        <img src="@/assets/img/forest.webp" alt="" class="recommendation__image">
+                        <img src="@/assets/img/forest.webp" alt="" data-aos="zoom-in" class="recommendation__image">
                     </li>
                 </ul>
             </section>
@@ -86,7 +90,6 @@ export default {
     font-style: normal;
     font-weight: 400;
     font-size: 8vw;
-    line-height: 34px;
     white-space: nowrap;
 }
 
@@ -130,8 +133,14 @@ export default {
 
 .recommendations__list {
     display: grid;
+    justify-content: space-between;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 16px;
+}
+
+.recommendation {
+    overflow: hidden;
+    border-radius: 8px;
 }
 
 .recommendation__image {
@@ -141,6 +150,76 @@ export default {
     border-radius: 8px;
     object-fit: cover;
     cursor: pointer;
+    transition: .3s;
+    background: #ededed;
 }
+
+.recommendation__image:hover {
+    transform: scale(1.05);
+}
+
+.welcome__illustrations {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.welcome__illustration {
+    position: absolute;
+}
+
+.welcome__illustration:nth-child(1) {
+    width: 250px;
+    z-index: 10;
+    transform: translate(40%, 10%);
+}
+
+.welcome__illustration:nth-child(2) {
+    width: 400px;
+}
+
+@media screen and (min-width: 700px) {
+    .welcome__title {
+        font-size: 56px;
+    }
+}
+
+@media screen and (min-width: 1150px) {
+    .welcome__container {
+        padding: 180px 32px;
+        display: grid;
+        align-items: center;
+        grid-template-columns: 1fr 1fr;
+    }
+    .welcome__title {
+        text-align: left;
+    }
+    .welcome__about {
+        width: 400px;
+    }
+    .welcome__start {
+        padding: 12px 24px;
+        width: auto;
+    }
+    .welcome__illustrations {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .recommendations__container {
+        gap: 104px;
+    }
+    .recommendations__subtitle {
+        font-size: 36px;
+        margin-bottom: 32px;
+    }
+    .recommendations__icon {
+        width: 32px;
+    }
+    .recommendation__image {
+        aspect-ratio: 3/1;
+    }
+}
+
 
 </style>

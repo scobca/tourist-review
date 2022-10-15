@@ -44,7 +44,9 @@ export default {
 
 .header {
     height: 70px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+    /*border-bottom: 1px solid #ededed;*/
     z-index: 100;
 }
 
@@ -72,14 +74,37 @@ export default {
     padding: 86px 26px;
     background: white;
     z-index: 10;
-    box-shadow: 0 0 100vw rgba(0, 0, 0, 0.3);
+    transform: translateX(100%);
+    transition: all .3s;
 }
+
+.header__menu_show {
+    box-shadow: 0 0 100vw 100vw rgba(0, 0, 0, .5);
+    transform: translateX(0);
+}
+
 
 .menu__list {
     size: 18px;
     display: flex;
     flex-direction: column;
     gap: 24px;
+}
+@media screen and (min-width: 1150px) {
+    .header__burger {
+        display: none;
+    }
+    .header__menu {
+        position: relative;
+        background: transparent;
+        box-shadow: none;
+        width: auto;
+        padding: 0;
+        transform: none;
+    }
+    .header__menu .menu__list {
+        flex-direction: row;
+    }
 }
 
 </style>
