@@ -1,85 +1,128 @@
 <template>
-  <router-view></router-view>
+    <router-view/>
 </template>
 
+<script>
+
+export default {
+
+}
+</script>
+
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,500;1,300&display=swap');
-* {
+
+@font-face {
+    font-family: 'IBM Plex Serif';
+    font-weight: normal;
+    src: local("sans-serif"),
+    url('@/assets/fonts/IBM_Plex_Serif/IBMPlexSerif-Regular.ttf');
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
     margin: 0;
     padding: 0;
     border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
 }
-
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
 body {
-    background: black;
-    height: 200vh;
+    font-family: 'IBM Plex Serif', sans-serif;
+    line-height: 1;
+    color: #222;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
 }
 
-.header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+:root {
+    --accent: #FF6464;
+    --accent-dark: #F56060;
+}
 
-    font-family: 'IBM Plex Serif', serif;
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1920px;
+    height: 100%;
+    padding: 16px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 26px;
+}
+
+h2 {
+    font-size: 18px;
+}
+
+button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.btn {
+    display: inline-block;
+    border-radius: 12px;
+    height: 48px;
+    padding: 12px 16px;
+    font-size: 18px;
+    background: var(--accent);
     color: white;
-    border-top: #FFE240 1px solid;
-    border-bottom: #FFE240 1px solid;
-    font-size: 2rem;
-    padding-bottom: 0.5em;
 }
 
-.header > h1 {
-    font-weight: 200;
-}
-
-.menu {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    margin-top: 2em;
-    margin-bottom: 4em;
-
-    font-family: "IBM Plex Serif", serif;
+.btn:hover {
+    background: var(--accent-dark);
     color: white;
-    font-size: 2rem;
 }
 
-.menu > .button {
-    border: #FFE240 1px solid;
-    border-radius: 5px;
-    width: 200px;
-    text-align: center;
-    padding-bottom: 7px;
-    font-weight: 200;
+router-link,
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
-.discriprion {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    margin-top: 2em;
-
-    font-family: "IBM Plex Serif", serif;
-    color: white;
-    font-size: 1rem;
+router-link:hover,
+a:hover {
+    color: var(--accent)
 }
 
-.discriprion > .h_wi, h2 {
-    width: 40%;
-    margin-bottom: 1em;
-    font-weight: 200;
+.header__menu {
+    transform: translateX(100%);
+    transition: all .3s;
 }
 
-.discriprion > .h_wwc, h2 {
-    width: 40%;
-    margin-bottom: 1em;
-    font-weight: 200;
+.header__menu_show {
+    transform: translateX(0);
 }
 
-.h_wwc > h2, .h_wi > h2 {
-    border-bottom: #FFE240 1px solid;
-    padding-bottom: 1em;
-}
 </style>
