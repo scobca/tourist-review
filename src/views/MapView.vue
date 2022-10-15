@@ -1,11 +1,11 @@
 <template>
     <section class="map">
+        <div id="map"></div>
         <input type="text" class="search" placeholder="Поиск">
     </section>
 </template>
 
 <script>
-
 
 export default {
     data() {
@@ -15,6 +15,15 @@ export default {
     },
     methods: {},
     computed: {},
+    mounted() {
+        ymaps.ready(function() {
+            const piter = new ymaps.Map(document.getElementById('map'), {
+                center: [59.94, 30.32],
+                zoom: 9,
+                controls: []
+            });
+        })
+    }
 }
 
 </script>
@@ -22,13 +31,16 @@ export default {
 <style scoped>
 
 body {
+
+}
+
+#map {
+    width: 100vw;
+    height: 100%;
 }
 
 .map {
     position: relative;
-    background: white url("@/assets/img/map.jpg") no-repeat;
-    background-size: cover;
-    padding: 24px;
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -38,6 +50,7 @@ body {
 }
 
 .search {
+    position: absolute;
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
