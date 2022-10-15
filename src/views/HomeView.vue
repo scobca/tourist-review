@@ -169,13 +169,13 @@ export default {
 }
 
 .welcome__illustration:nth-child(1) {
-    width: 250px;
+    width: 200px;
     z-index: 10;
     transform: translate(40%, 10%);
 }
 
 .welcome__illustration:nth-child(2) {
-    width: 400px;
+    width: 300px;
 }
 
 @media screen and (min-width: 700px) {

@@ -16,7 +16,7 @@
                         <router-link :to="{ name: 'home' }" class="menu__link"> Зарегистрироваться </router-link>
                     </li>
                     <li class="menu__item">
-                        <router-link :to="{ name: 'home' }" class="menu__link"> Поддрежка </router-link>
+                        <router-link :to="{ name: 'map' }" class="menu__link"> Карта </router-link>
                     </li>
                 </ul>
             </nav>

@@ -50,6 +50,7 @@ body {
 }
 
 .search {
+    box-shadow: 0 0 104px 4px rgba(0, 0, 0, .5);
     position: absolute;
     width: 100%;
     max-width: 800px;
