@@ -1,5 +1,4 @@
 <template>
-    <PageHeader/>
 
     <section class="welcome">
         <div class="welcome__container container">
@@ -60,8 +59,6 @@
 
         </div>
     </section>
-
-    <PageFooter/>
 
 </template>
 

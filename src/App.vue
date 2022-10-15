@@ -1,11 +1,15 @@
 <template>
+    <page-header/>
     <router-view/>
+    <page-footer/>
 </template>
 
 <script>
 
+import PageHeader from "@/components/PageHeader";
+import PageFooter from "@/components/PageFooter";
 export default {
-
+    components: {PageFooter, PageHeader}
 }
 </script>
 
@@ -60,6 +64,13 @@ q:before, q:after {
     content: none;
 }
 
+#app {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
 :root {
     --accent: #FF6464;
     --accent-dark: #F56060;
@@ -103,6 +114,18 @@ button {
 .btn:hover {
     background: var(--accent-dark);
     color: white;
+}
+
+input {
+    border: none;
+    border-radius: 8px;
+    height: 40px;
+    padding: 8px 16px;
+    font-size: 18px;
+}
+
+input[type='submit'] {
+    cursor: pointer;
 }
 
 router-link,

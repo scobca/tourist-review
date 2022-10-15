@@ -1,0 +1,55 @@
+<template>
+    <section class="login">
+        <div class="login__container container">
+            <h1 class="login__title"> Вход </h1>
+            <form action="#" class="login__form">
+                <input type="text" placeholder="Логин">
+                <input type="password" placeholder="Пароль">
+                <input type="submit" value="Войти">
+            </form>
+        </div>
+    </section>
+</template>
+
+<script>
+export default {
+    name: "LoginView"
+}
+</script>
+
+<style scoped>
+
+.login__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login__title {
+    font-size: 36px;
+    margin-bottom: 48px;
+}
+
+.login__form {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    grid-gap: 16px;
+}
+
+input {
+    height: 48px;
+    border: 1px solid #ededed;
+}
+
+input[type='submit'] {
+    background: var(--accent);
+    color: white;
+}
+
+input[type='submit']:hover {
+    background: var(--accent-dark);
+}
+
+</style>

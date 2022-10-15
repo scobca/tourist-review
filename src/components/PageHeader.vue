@@ -7,13 +7,16 @@
             <button class="header__burger" @click="toggleMenu">
                 <img src="@/assets/img/bars.svg" alt="">
             </button>
-            <nav class="header__menu menu" :class="{ 'header__menu_show': this.menu }">
+            <nav class="header__menu menu" :class="{ 'header__menu_show': this.$store.state.menu }">
                 <ul class="menu__list">
                     <li class="menu__item">
-                        <router-link :to="{ name: 'home' }" class="menu__link"> Войти </router-link>
+                        <router-link :to="{ name: 'home' }" class="menu__link"> Главная </router-link>
                     </li>
                     <li class="menu__item">
-                        <router-link :to="{ name: 'home' }" class="menu__link"> Зарегистрироваться </router-link>
+                        <router-link :to="{ name: 'login' }" class="menu__link"> Войти </router-link>
+                    </li>
+                    <li class="menu__item">
+                        <router-link :to="{ name: 'register' }" class="menu__link"> Зарегистрироваться </router-link>
                     </li>
                     <li class="menu__item">
                         <router-link :to="{ name: 'map' }" class="menu__link"> Карта </router-link>
@@ -27,15 +30,15 @@
 <script>
 export default {
     name: "PageHeader",
-    data() {
-        return {
-            menu: false
-        }
-    },
     methods: {
         toggleMenu() {
-            this.menu = !this.menu
+            this.$store.commit('toggleMenu')
         }
+    },
+    mounted() {
+        router.beforeEach((to, from) => {
+            this.$store.commit('closeMenu')
+        })
     }
 }
 </script>
