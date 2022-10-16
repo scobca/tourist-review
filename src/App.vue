@@ -139,4 +139,10 @@ a:hover {
     color: var(--accent)
 }
 
+@media screen and (max-width: 1920px) {
+    .container {
+        max-width: 1620px;
+    }
+}
+
 </style>
