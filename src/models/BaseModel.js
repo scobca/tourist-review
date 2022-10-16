@@ -11,8 +11,8 @@ class BaseModel {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             })
 
-            if (options.data) {
-                options.body = JSON.stringify(options.data)
+            if (options.body) {
+                options.body = JSON.stringify(options.body)
                 options.method = options.method ?? 'POST'
             }
 
