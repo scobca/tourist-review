@@ -13,14 +13,21 @@
                         <router-link :to="{ name: 'home' }" class="menu__link"> Главная </router-link>
                     </li>
                     <li class="menu__item">
-                        <router-link :to="{ name: 'login' }" class="menu__link"> Войти </router-link>
-                    </li>
-                    <li class="menu__item">
-                        <router-link :to="{ name: 'register' }" class="menu__link"> Зарегистрироваться </router-link>
-                    </li>
-                    <li class="menu__item">
                         <router-link :to="{ name: 'map' }" class="menu__link"> Карта </router-link>
                     </li>
+                    <template v-if="this.$store.state.token">
+                        <li class="menu__item">
+                            <router-link :to="{ name: 'home' }" @click="logout" class="menu__link"> Выйти </router-link>
+                        </li>
+                    </template>
+                    <template v-else>
+                        <li class="menu__item">
+                            <router-link :to="{ name: 'login' }" class="menu__link"> Войти </router-link>
+                        </li>
+                        <li class="menu__item">
+                            <router-link :to="{ name: 'register' }" class="menu__link"> Зарегистрироваться </router-link>
+                        </li>
+                    </template>
                 </ul>
             </nav>
         </div>
@@ -28,11 +35,17 @@
 </template>
 
 <script>
+import router from "@/router";
+import AuthModel from "@/models/AuthModel";
+
 export default {
     name: "PageHeader",
     methods: {
         toggleMenu() {
             this.$store.commit('toggleMenu')
+        },
+        logout() {
+            AuthModel.logout();
         }
     },
     mounted() {

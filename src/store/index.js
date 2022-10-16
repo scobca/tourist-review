@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 export default createStore({
   state() {
     return {
+      token: localStorage.getItem('token'),
       menu: false
     }
   },
@@ -14,6 +15,9 @@ export default createStore({
     },
     closeMenu() {
       this.state.menu = false
+    },
+    updateToken(state, token) {
+      state.token = token;
     }
   },
   actions: {

@@ -2,9 +2,9 @@
     <section class="login">
         <div class="login__container container">
             <h1 class="login__title"> Вход </h1>
-            <form action="#" class="login__form">
-                <input type="text" placeholder="Логин">
-                <input type="password" placeholder="Пароль">
+            <form action="#" class="login__form" @submit.prevent="login">
+                <input type="email" placeholder="Почта" v-model="email">
+                <input type="password" placeholder="Пароль" v-model="password">
                 <input type="submit" value="Войти">
             </form>
             <router-link :to="{ name: 'register'}" class="login__redirect"> Зарегистрироваться </router-link>
@@ -13,11 +13,22 @@
 </template>
 
 <script>
+import AuthModel from "@/models/AuthModel";
+
 export default {
+    data() {
+      return {
+          email: '',
+          password: ''
+      }
+    },
     name: "LoginView",
     methods: {
         login() {
-
+            AuthModel.login({
+                email: this.email,
+                password: this.password
+            })
         }
     }
 }

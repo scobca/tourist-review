@@ -33,6 +33,4 @@ const router = createRouter({
   routes
 })
 
-window.router = router;
-
 export default router

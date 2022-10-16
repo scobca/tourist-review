@@ -5,16 +5,14 @@ class BaseModel {
     static request(route, options) {
         return new Promise((resolve, reject) => {
 
-            const method = options.method ?? 'GET';
-
-            const headers = options.headers ?? new Headers({
+            options.headers = options.headers ?? new Headers({
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             })
 
-            if (options.body) {
-                options.body = JSON.stringify(options.body)
+            if (options.data) {
+                options.body = JSON.stringify(options.data)
                 options.method = options.method ?? 'POST'
             }
 
