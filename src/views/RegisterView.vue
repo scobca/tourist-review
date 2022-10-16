@@ -8,6 +8,7 @@
                 <input type="password" placeholder="Потвор пароля">
                 <input type="submit" value="Зарегистрироваться">
             </form>
+            <router-link :to="{ name: 'login'}" class="register__redirect"> Войти </router-link>
         </div>
     </section>
 </template>
@@ -37,6 +38,11 @@ export default {
     grid-template-columns: 1fr;
     width: 100%;
     grid-gap: 16px;
+    max-width: 600px;
+}
+
+.register__redirect {
+    margin-top: 24px;
 }
 
 input {

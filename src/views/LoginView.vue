@@ -7,6 +7,7 @@
                 <input type="password" placeholder="Пароль">
                 <input type="submit" value="Войти">
             </form>
+            <router-link :to="{ name: 'register'}" class="login__redirect"> Зарегистрироваться </router-link>
         </div>
     </section>
 </template>
@@ -36,6 +37,11 @@ export default {
     grid-template-columns: 1fr;
     width: 100%;
     grid-gap: 16px;
+    max-width: 600px;
+}
+
+.login__redirect {
+    margin-top: 24px;
 }
 
 input {
