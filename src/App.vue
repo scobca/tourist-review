@@ -1,6 +1,8 @@
 <template>
     <page-header/>
-    <router-view/>
+    <transition name="slide">
+        <router-view/>
+    </transition>
     <page-footer/>
 </template>
 
@@ -62,6 +64,16 @@ blockquote:before, blockquote:after,
 q:before, q:after {
     content: '';
     content: none;
+}
+
+/* redirect animation */
+.slide-enter-active {
+  transition: opacity .3s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+    opacity: 0  ;
 }
 
 #app {
