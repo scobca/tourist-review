@@ -1,8 +1,8 @@
 class BaseModel {
 
-    baseUrl = 'https://turist-ru.herokuapp.com/api/'
+    static baseUrl = 'https://turist-ru.herokuapp.com/api/'
 
-    request(route, options) {
+    static request(route, options) {
         return new Promise((resolve, reject) => {
 
             const method = options.method ?? 'GET';
@@ -15,7 +15,7 @@ class BaseModel {
 
             if (options.body) options.body = JSON.stringify(options.body)
 
-            fetch(route, options)
+            fetch(this.baseUrl + route, options)
                 .then(resp => resp.json())
                 .then(data => resolve(data))
                 .catch(err => reject(err))
