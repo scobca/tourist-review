@@ -1,8 +1,9 @@
 <template>
     <header class="header">
         <div class="header__container container">
-            <router-link :to="{ name: 'home' }" class="header__logo">
-                <img src="@/assets/img/logo.svg" alt="Турист.ру" class="header__logo">
+            <router-link :to="{ name: 'home' }" class="header__logo logo">
+                <img src="@/assets/img/full-logo.png" class="header__logo logo__image_full">
+                <img src="@/assets/img/logo.svg" alt="Турист.ру" class="header__logo logo__image_short">
             </router-link>
             <button class="header__burger" @click="toggleMenu">
                 <img src="@/assets/img/bars.svg" alt="">
@@ -75,6 +76,18 @@ export default {
 
 .header__logo {
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo__image_full {
+    display: none;
+}
+
+router-link:hover .logo__text {
+    color: black !important;
 }
 
 .header__burger {
@@ -106,7 +119,14 @@ export default {
     flex-direction: column;
     gap: 24px;
 }
+
 @media screen and (min-width: 1150px) {
+    .logo__image_full {
+        display: block;
+    }
+    .logo__image_short {
+        display: none;
+    }
     .header__burger {
         display: none;
     }
