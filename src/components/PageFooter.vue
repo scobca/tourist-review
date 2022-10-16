@@ -21,7 +21,7 @@ export default {
     }
     
     .footer__container {
-        padding: 12px 24px;
+        padding: 16px 24px;
         display: flex;
         justify-content: center;
         align-items: center;

@@ -39,10 +39,14 @@ export default {
 
 <style scoped>
 
+.register {
+    margin-top: 80px;
+}
+
 .register__container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 

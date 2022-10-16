@@ -12,10 +12,10 @@
                         <img src="@/assets/img/kazan.jpg" alt="" class="recommendation__image">
                     </li>
                     <li class="recommendations__item recommendation">
-                        <img src="@/assets/img/petergof.jpg" alt=""  data-aos="zoom-in" class="recommendation__image">
+                        <img src="@/assets/img/petergof.jpg" alt="" data-aos="zoom-in" class="recommendation__image">
                     </li>
                     <li class="recommendations__item recommendation">
-                        <img src="@/assets/img/ermitaj.jpg" alt=""  data-aos="zoom-in" class="recommendation__image">
+                        <img src="@/assets/img/ermitaj.jpg" alt="" data-aos="zoom-in" class="recommendation__image">
                     </li>
                 </ul>
             </section>

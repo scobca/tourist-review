@@ -1,9 +1,8 @@
 <template>
-    <page-header/>
+    <page-header v-if="$route.name != 'map'"/>
     <transition name="slide">
         <router-view/>
     </transition>
-    <page-footer/>
 </template>
 
 <script>
@@ -54,6 +53,7 @@ body {
     line-height: 1;
     color: #222;
 }
+
 ol, ul {
     list-style: none;
 }
@@ -79,7 +79,7 @@ q:before, q:after {
 #app {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     min-height: 100vh;
 }
 

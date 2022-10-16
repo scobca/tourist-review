@@ -11,7 +11,7 @@
 
             <div class="welcome__illustrations" data-aos="fade-up" data-aos-duration="700">
                 <img src="@/assets/img/logo.svg" alt="" class="welcome__illustration">
-                <img src="@/assets/img/logo.svg" alt=""  data-aos="fade-up" data-aos-duration="700" class="welcome__illustration">
+                <img src="@/assets/img/logo.svg" alt="" data-aos="fade-up" data-aos-duration="700" class="welcome__illustration">
             </div>
             
             
@@ -96,7 +96,7 @@ export default {
 
 @media screen and (min-width: 1150px) {
     .welcome__container {
-        padding: 180px 32px;
+        padding: 300px 32px;
         display: grid;
         align-items: center;
         grid-template-columns: 1fr 1fr;

@@ -2,7 +2,7 @@
     <header class="header">
         <div class="header__container container">
             <router-link :to="{ name: 'home' }" class="header__logo logo">
-                <img src="@/assets/img/full-logo.png" class="header__logo logo__image_full">
+                <img src="@/assets/img/full-logo.svg" class="header__logo logo__image_full">
                 <img src="@/assets/img/logo.svg" alt="Турист.ру" class="header__logo logo__image_short">
             </router-link>
             <button class="header__burger" @click="toggleMenu">
@@ -59,12 +59,20 @@ export default {
 
 <style scoped>
 
+@font-face {
+    font-family: 'Open Sans';
+    src: url("@/assets/fonts/Open_Sans/static/OpenSans/OpenSans-Regular.ttf");
+}
+
 .header {
     height: 70px;
     /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
     /*border-bottom: 1px solid #ededed;*/
     z-index: 100;
+    width: 100%;
+    background: white;
+    font-family: "Open Sans";
 }
 
 .header__container {

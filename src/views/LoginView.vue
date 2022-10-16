@@ -36,10 +36,14 @@ export default {
 
 <style scoped>
 
+.login {
+    margin-top: 80px;
+}
+
 .login__container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 
