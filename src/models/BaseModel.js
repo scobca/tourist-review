@@ -13,7 +13,10 @@ class BaseModel {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             })
 
-            if (options.body) options.body = JSON.stringify(options.body)
+            if (options.body) {
+                options.body = JSON.stringify(options.body)
+                options.method = options.method ?? 'POST'
+            }
 
             fetch(this.baseUrl + route, options)
                 .then(resp => resp.json())
@@ -23,3 +26,5 @@ class BaseModel {
         })
     }
 }
+
+export default BaseModel;

@@ -14,7 +14,12 @@
 
 <script>
 export default {
-    name: "LoginView"
+    name: "LoginView",
+    methods: {
+        login() {
+
+        }
+    }
 }
 </script>
 
