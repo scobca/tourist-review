@@ -20,21 +20,22 @@ export default {
 }
 
 .welcome__illustration:nth-child(1) {
-    width: 100px;
+    width: 75px;
     z-index: 10;
     transform: translate(40%, 10%);
-    margin-left: 130px;
+    margin-left: 65px;
     animation: balloons1 2s infinite alternate ease-in-out;
 }
 
 .welcome__illustration:nth-child(2) {
-    width: 150px;
+    width: 100px;
+    margin-right: 35px;
     animation: balloons2 2s infinite alternate ease-in-out;
 }
 
 @keyframes balloons1 {
     from {
-        transform: translateY(30%);
+        transform: translateY(25%);
     }
     to {
         transform: translateY(20%);

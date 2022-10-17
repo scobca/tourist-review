@@ -20,8 +20,6 @@ class MapModel {
             style: 'mapbox://styles/kosakura/cl9bpvqqr002n15nlxbmrsmdm?optimize=true', // Specify which map style to use?
             center: [30.315644, 59.938955], // Specify the starting position
             zoom: 13, // Specify the starting zoom,
-            minzoom: 10,
-            maxzoom: 15,
             projection: 'globe'
         });
 
