@@ -96,7 +96,7 @@ export default {
 
 @media screen and (min-width: 1150px) {
     .welcome__container {
-        padding: 300px 32px;
+        padding: 240px 32px;
         display: grid;
         align-items: center;
         grid-template-columns: 1fr 1fr;

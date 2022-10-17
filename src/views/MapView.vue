@@ -1,9 +1,13 @@
 <template>
-    <content-loader v-show="!mapLoaded"/>
+    <content-loader v-show="false"/>
     <section class="map">
         <div id="map"></div>
         <div class="map__controls">
-            <input class="map__input" type="text" placeholder="Куда">
+            <form action="" class="map__form">
+                <input class="map__input" type="text" placeholder="Откуда">
+                <input class="map__input" type="text" placeholder="Куда">
+                <input class="map__submit" type="submit" value="Построить">
+            </form>
         </div>
     </section>
 </template>
@@ -12,6 +16,7 @@
 
 import MapModel from "@/models/MapModel";
 import ContentLoader from '@/components/ContentLoader'
+import PageHeader from "@/components/PageHeader";
 
 export default {
     data() {
@@ -49,6 +54,7 @@ export default {
 
     },
     components: {
+        PageHeader,
         'content-loader': ContentLoader
     }
 }
@@ -63,7 +69,7 @@ export default {
 
 #map {
     width: 100vw;
-    height: 100%;
+    height: 100vh;
 }
 
 .map {
@@ -77,30 +83,47 @@ export default {
 }
 
 .map__controls {
+    border-radius: 8px 8px 0 0;
+    background: white;
+    grid-gap: 8px;
+    position: fixed;
+    bottom: 0;
+    padding:  24px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.map__form {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 8px;
-    position: absolute;
-    padding:  24px;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
 }
 
 .map__input {
     width: 100%;
     outline: none;
-    background: white;
+    background: #ededed;
     border: none;
-    border-radius: 16px;
-    padding: 16px 24px;
-    height: 56px;
-    font-size: 18px;
+    border-radius: 8px;
+    padding: 8px 24px;
+    height: 40px;
+    font-size: 16px;
     font-family: "IBM Plex Serif", sans-serif;
-    box-shadow: 0 0 40px 10px rgba(0, 0, 0, .2);
-
 }
+
+map__input::placeholder {
+    color: #858585;
+}
+
+.map__submit {
+    background: var(--accent);
+    color: white;
+}
+
 
 
 </style>
