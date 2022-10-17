@@ -8,7 +8,7 @@
                 <input type="submit" value="Войти">
             </form>
             <router-link :to="{ name: 'register'}" class="login__redirect"> Зарегистрироваться </router-link>
-            <span class="error"> {{ this.error }} </span>
+            <span class="error"> {{ error.msg }} </span>
         </div>
     </section>
 </template>
@@ -21,7 +21,7 @@ export default {
       return {
           email: '',
           password: '',
-          error: ''
+          error: {}
       }
     },
     name: "LoginView",
@@ -32,8 +32,8 @@ export default {
                 password: this.password
             });
             if (data.error) {
-                this.error = data.error.msg;
-            } else this.error = ''
+                this.error = data.error;
+            } else this.error = {}
         }
     }
 }
