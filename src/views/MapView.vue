@@ -1,5 +1,5 @@
 <template>
-    <content-loader v-show="false"/>
+    <content-loader v-show="!mapLoaded"/>
     <section class="map">
         <div id="map"></div>
         <div class="map__controls">
