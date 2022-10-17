@@ -1,8 +1,6 @@
 <template>
     <page-header v-if="$route.name != 'map'"/>
-    <transition name="slide">
-        <router-view/>
-    </transition>
+    <router-view/>
 </template>
 
 <script>

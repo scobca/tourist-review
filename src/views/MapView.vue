@@ -17,40 +17,59 @@
 import MapModel from "@/models/MapModel";
 import ContentLoader from '@/components/ContentLoader'
 import PageHeader from "@/components/PageHeader";
+import EventsModel from "@/models/EventsModel";
 
 export default {
     data() {
         return {
+            event: null,
             mapLoaded: false
         }
     },
+    props: ['coords', 'id'],
     methods: {},
     computed: {},
+    async created() {
+
+        if (this.$route.query.place) {
+            this.event = await EventsModel.getEvent(this.$route.query.place)
+        }
+
+        console.log(this.event);
+
+    },
     mounted() {
 
         MapModel.init();
 
         MapModel.map.on('load', () => this.mapLoaded = true )
 
-        MapModel.buildRoute({
-            "desiredCoordinates": "59.939592, 30.314779",
-            "points": [
-                "59.956526, 30.310432",
-                "59.939592, 30.314779"
-            ],
-            "ratio": "0",
-            "filter": [
-                "TOURISM",
-                "POI",
-                "PEDESTRIAN_AREA",
-                "HISTORICAL_OBJECT",
-                "RELIGIOUS_OBJECT",
-                "VIEW_POINT",
-                "PIECE_OF_ART",
-                "CULTURAL_OBJECT",
-                "MONUMENT"
-            ]
-        })
+        if (this.$route.params.coords) {
+
+            const { lat, lon } = this.$route.params.coords;
+
+
+            MapModel.buildRoute({
+                desiredCoordinates: `${lat}, ${lon}`,
+                points: [
+                    "59.956526, 30.310432",
+                    "59.939592, 30.314779"
+                ],
+                ratio: 0,
+                filter: [
+                    "TOURISM",
+                    "POI",
+                    "PEDESTRIAN_AREA",
+                    "HISTORICAL_OBJECT",
+                    "RELIGIOUS_OBJECT",
+                    "VIEW_POINT",
+                    "PIECE_OF_ART",
+                    "CULTURAL_OBJECT",
+                    "MONUMENT"
+                ]
+            })
+        }
+
 
     },
     components: {

@@ -18,7 +18,11 @@
         </div>
     </section>
 
-    <RecommendedRoutes/>
+    <DayEvent/>
+
+    <EventSearch/>
+
+<!--    <RecommendedRoutes/>-->
 
 </template>
 
@@ -28,12 +32,14 @@ import AOS from 'aos';
 import PageFooter from "@/components/PageFooter";
 import PageHeader from "@/components/PageHeader";
 import RecommendedRoutes from "@/components/RecommendedRoutes";
+import DayEvent from "@/components/DayEvent";
+import EventSearch from "@/components/EventSearch";
 
 AOS.init();
 
 export default {
     name: "HomeView",
-    components: {RecommendedRoutes, PageHeader, PageFooter}
+    components: {EventSearch, DayEvent, RecommendedRoutes, PageHeader, PageFooter}
 }
 </script>
 

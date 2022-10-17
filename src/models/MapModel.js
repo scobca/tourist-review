@@ -84,6 +84,7 @@ class MapModel {
     }
 
     static flightAcrossTheRoute(coords) {
+        return false;
         let step = 0
         setInterval(() => {
             if (!coords[step]) clearInterval()

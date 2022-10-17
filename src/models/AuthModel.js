@@ -4,12 +4,14 @@ import store from "@/store";
 
 class AuthModel {
     static async login(credentials) {
-        const { token } = await BaseModel.request('auth/login', { body: credentials })
-        this._auth(token)
+        const data = await BaseModel.request('auth/login', { body: credentials })
+        if (data.token) this._auth(data.token)
+        return data;
     }
     static async register(credentials) {
-        const { token } = await BaseModel.request('auth/signup', { body: credentials })
-        this._auth(token)
+        const data = await BaseModel.request('auth/signup', { body: credentials })
+        if (data.token) this._auth(data.token)
+        return data;
     }
     static logout() {
         localStorage.removeItem('token')

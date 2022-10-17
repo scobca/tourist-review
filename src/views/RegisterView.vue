@@ -3,12 +3,13 @@
         <div class="register__container container">
             <h1 class="register__title"> Регистрация </h1>
             <form action="#" class="register__form" @submit.prevent="register">
-                <input type="text" placeholder="Логин" v-model="username">
-                <input type="email" placeholder="Почта" v-model="email">
-                <input type="password" placeholder="Пароль" v-model="password">
+                <input type="text" placeholder="Логин" v-model="username" :class="{ 'input-invalid': error.param === 'username' }">
+                <input type="email" placeholder="Почта" v-model="email" :class="{ 'input-invalid': error.param === 'email' }">
+                <input type="password" placeholder="Пароль" v-model="password" :class="{ 'input-invalid': error.param === 'password' }">
                 <input type="submit" value="Зарегистрироваться">
             </form>
             <router-link :to="{ name: 'login'}" class="register__redirect"> Войти </router-link>
+            <span class="error"> {{ error.msg }} </span>
         </div>
     </section>
 </template>
@@ -22,16 +23,20 @@ export default {
         return {
             username: '',
             email: '',
-            password: ''
+            password: '',
+            error: {}
         }
     },
     methods: {
-        register() {
-            AuthModel.register({
+        async register() {
+            const data = await AuthModel.register({
                 email: this.email,
                 password: this.password,
                 username: this.username,
             })
+            if (data.error) {
+                this.error = data.error
+            } else this.error = {}
         }
     }
 }
@@ -39,15 +44,27 @@ export default {
 
 <style scoped>
 
+.input-invalid {
+    border: 1px solid var(--accent)
+}
+
+.error {
+    margin-top: 32px;
+    color: #F56060;
+}
+
 .register {
     margin-top: 80px;
 }
 
 .register__container {
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
+    height: 100%;
 }
 
 .register__title {

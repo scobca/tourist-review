@@ -3,11 +3,12 @@
         <div class="login__container container">
             <h1 class="login__title"> Вход </h1>
             <form action="#" class="login__form" @submit.prevent="login">
-                <input type="email" placeholder="Почта" v-model="email">
-                <input type="password" placeholder="Пароль" v-model="password">
+                <input type="email" placeholder="Почта" v-model="email" :class="{ 'input-invalid': error.param === 'email' }">
+                <input type="password" placeholder="Пароль" v-model="password" :class="{ 'input-invalid': error.param === 'password' }">
                 <input type="submit" value="Войти">
             </form>
             <router-link :to="{ name: 'register'}" class="login__redirect"> Зарегистрироваться </router-link>
+            <span class="error"> {{ this.error }} </span>
         </div>
     </section>
 </template>
@@ -19,16 +20,20 @@ export default {
     data() {
       return {
           email: '',
-          password: ''
+          password: '',
+          error: ''
       }
     },
     name: "LoginView",
     methods: {
-        login() {
-            AuthModel.login({
+        async login() {
+            const data = await AuthModel.login({
                 email: this.email,
                 password: this.password
-            })
+            });
+            if (data.error) {
+                this.error = data.error.msg;
+            } else this.error = ''
         }
     }
 }
@@ -36,15 +41,28 @@ export default {
 
 <style scoped>
 
+.input-invalid {
+    border: 1px solid var(--accent)
+}
+
+
 .login {
     margin-top: 80px;
 }
 
+.error {
+    margin-top: 32px;
+    color: #F56060;
+}
+
 .login__container {
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
+    height: 100%;
 }
 
 .login__title {

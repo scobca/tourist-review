@@ -2,7 +2,7 @@ class BaseModel {
 
     static baseUrl = 'https://turist-ru.herokuapp.com/api/'
 
-    static request(route, options) {
+    static request(route, options={}) {
         return new Promise((resolve, reject) => {
 
             options.headers = options.headers ?? new Headers({
