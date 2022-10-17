@@ -19,9 +19,17 @@ class MapModel {
             // style: 'mapbox://styles/mapbox/satellite-v9', // Specify which map style to use?
             style: 'mapbox://styles/kosakura/cl9bpvqqr002n15nlxbmrsmdm?optimize=true', // Specify which map style to use?
             center: [30.315644, 59.938955], // Specify the starting position
-            zoom: 13, // Specify the starting zoom,
+            zoom: 1, // Specify the starting zoom,
             projection: 'globe'
         });
+
+        this.map.on('load', () => {
+            this.map.flyTo({
+                center: [30.315644, 59.938955],
+                zoom: 13,
+                essential: true // this animation is considered essential with respect to prefers-reduced-motion
+            });
+        })
 
     }
 
