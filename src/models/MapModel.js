@@ -35,7 +35,9 @@ class MapModel {
             })
         );
 
+
         this.map.on('load', () => {
+            document.querySelector('.mapboxgl-ctrl-geolocate').click();
             this.map.flyTo({
                 center: [30.315644, 59.938955],
                 zoom: 15,
