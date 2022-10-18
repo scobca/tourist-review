@@ -83,7 +83,7 @@ export default {
     grid-template-columns: 1fr;
     grid-gap: 8px;
     max-height: 30vh;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .suggest {
