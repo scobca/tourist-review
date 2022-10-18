@@ -2,11 +2,15 @@
     <div class="map__controls">
         <form action="" class="map__form">
             <input class="map__input" type="text" placeholder="Куда" @input="searchPlace" v-model="query">
-            <button class="map__delete" @click.prevent="deleteRoute"> &cross; </button>
+            <button class="map__delete " @click.prevent="deleteRoute"> &cross; </button>
+            <input class="map__input map__geo" type="text" placeholder="Откуда" @input="searchGeo" v-model="geo">
             <!--            <input class="map__submit" type="submit" value=">">-->
         </form>
         <ul class="suggestions">
             <li class="suggest" v-for="suggest in suggestions" @click="findPlace(suggest)"> {{ suggest }} </li>
+        </ul>
+        <ul class="suggestions">
+            <li class="suggest" v-for="suggest in geolocations" @click="findGeo(suggest)"> {{ suggest }} </li>
         </ul>
     </div>
 </template>
@@ -19,8 +23,10 @@ export default {
     name: "MapControls",
     data() {
         return {
+            geo: '',
             query: '',
-            suggestions: []
+            suggestions: [],
+            geolocations: []
         }
     },
     methods: {
@@ -32,10 +38,33 @@ export default {
             if( this.query.length === 0) this.suggestions = []
             this.suggestions = (await PlaceModel.search(this.query.trim())).suggestions
         },
+        async searchGeo() {
+            if (this.geo.length < 3) return false
+            if( this.geo.length === 0) this.suggestions = []
+            this.geolocations = (await PlaceModel.search(this.geo.trim())).suggestions
+            this.geolocations.unshift('Моё местоположение')
+        },
+        async findGeo(name) {
+            this.geo = name;
+            this.suggestions = []
+            this.geolocations = []
+        },
         async findPlace(name) {
             this.query = name
             this.suggestions = []
-            MapModel.buildRoute(name)
+            this.geolocations = []
+
+            const geo = this.geo === 'Моё местоположение' ? MapModel.userGeolocation : this.geo;
+
+            MapModel.buildRoute(
+                this.query,
+                geo
+            )
+
+            //
+            // if (MapModel.userGeolocation.lat && MapModel.userGeolocation.lon) {
+            //     MapModel.buildRoute(name)
+            // } else MapModel.buildRoute(name, this.geo)
 
         }
     }
@@ -43,6 +72,10 @@ export default {
 </script>
 
 <style scoped>
+.map__geo {
+    grid-column: 1/-1;
+}
+
 .map__delete {
     background: var(--accent);
     color: white;
@@ -73,7 +106,7 @@ export default {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 48px;
-    grid-template-rows: 48px;
+    grid-template-rows: 48px 48px;
     grid-gap: 6px;
 }
 

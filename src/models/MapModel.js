@@ -58,6 +58,7 @@ class MapModel {
             positionOptions: {
                 enableHighAccuracy: true
             },
+            showAccuracyCircle: false,
             trackUserLocation: true,
             showUserHeading: true
         })
@@ -85,7 +86,7 @@ class MapModel {
             loc: 'spb',
             points: [
                 destination,
-                this.userGeolocation,
+                departure ?? this.userGeolocation,
             ],
             filters: this.filters,
             ratio: this.ratio
