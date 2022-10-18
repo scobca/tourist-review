@@ -12,9 +12,6 @@ class EventsModel {
     static async getEvent(id) {
         return await BaseModel.request(`event?id=${id}`)
     }
-    static async getPlace(id) {
-        return await BaseModel.request(`place?id=${id}`)
-    }
 }
 
 export default EventsModel

@@ -7,6 +7,21 @@ class MapModel {
 
     static map
 
+    static ratio = 0
+    static filters = [
+        "TOURISM",
+        "POI",
+        "PEDESTRIAN_AREA",
+        "HISTORICAL_OBJECT",
+        "RELIGIOUS_OBJECT",
+        "VIEW_POINT",
+        "PIECE_OF_ART",
+        "CULTURAL_OBJECT",
+        "MONUMENT"
+    ]
+
+    static userGeolocation = {}
+
     static init() {
 
         this.map = new mapboxgl.Map({
@@ -23,21 +38,8 @@ class MapModel {
             projection: 'globe'
         });
 
-        this.map.addControl(
-            new mapboxgl.GeolocateControl({
-                positionOptions: {
-                    enableHighAccuracy: true
-                },
-// When active the map will receive updates to the device's location as it changes.
-                trackUserLocation: true,
-// Draw an arrow next to the location dot to indicate which direction the device is heading.
-                showUserHeading: true
-            })
-        );
-
-
         this.map.on('load', () => {
-            document.querySelector('.mapboxgl-ctrl-geolocate').click();
+            this.getUserGeo();
             this.map.flyTo({
                 center: [30.315644, 59.938955],
                 zoom: 15,
@@ -47,11 +49,46 @@ class MapModel {
 
     }
 
-    static async buildRoute(body) {
+    static async getUserGeo() {
 
-        const data = await BaseModel.request('map/route', { body })
+        this.geolocateControls = new mapboxgl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            },
+            trackUserLocation: true,
+            showUserHeading: true
+        })
 
-        const coords = data.body.latLonPoints.map(item => item.reverse())
+        this.map.addControl(this.geolocateControls);
+        setTimeout(function() {
+            document.querySelector('.mapboxgl-ctrl-geolocate').click()
+        }, 200)
+
+
+        this.geolocateControls.on('geolocate', function(e) {
+            const lon = e.coords.longitude;
+            const lat = e.coords.latitude
+            MapModel.userGeolocation = {lon, lat}
+        });
+
+    }
+
+    static async buildRoute(points) {
+
+        const body = {
+            points,
+            desiredCoordinates: points[0],
+            filters: this.filters,
+            ratio: this.ratio
+        }
+
+        const { latLonPoints } = await BaseModel.request('map/route', { body })
+
+        const coords = latLonPoints.map(item => item.reverse())
+
+        // Remove old route
+        if (this.map.getLayer('route')) this.map.removeLayer('route')
+        if (this.map.getSource('route')) this.map.removeSource('route')
 
         this.map.addSource('route', {
             type: 'geojson',
