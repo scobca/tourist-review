@@ -114,7 +114,7 @@ class MapModel {
                 data: geojson
             })
 
-            this.пmap.addLayer(
+            this.map.addLayer(
                 {
                     id: 'routeline-active',
                     type: 'line',
