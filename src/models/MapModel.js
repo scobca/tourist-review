@@ -7,7 +7,7 @@ class MapModel {
 
     static map
 
-    static ratio = 0
+    static ratio = 1.5
     static filters = [
         "TOURISM",
         "POI",
@@ -66,72 +66,68 @@ class MapModel {
 
 
         this.geolocateControls.on('geolocate', function(e) {
+            if (MapModel.currentRoute) MapModel.buildRoute()
             const lon = e.coords.longitude;
             const lat = e.coords.latitude
-            MapModel.userGeolocation = {lon, lat}
+            MapModel.userGeolocation = `${lat}, ${lon}`;
         });
 
     }
 
-    static async buildRoute(points) {
+    static async buildRoute(destination=this.currentRoute) {
+
+        MapModel.currentRoute = destination;
 
         const body = {
-            points,
-            desiredCoordinates: points[0],
+            loc: 'spb',
+            points: [
+                destination,
+                this.userGeolocation,
+            ],
             filters: this.filters,
             ratio: this.ratio
         }
 
         const { latLonPoints } = await BaseModel.request('map/route', { body })
 
+
+
         const coords = latLonPoints.map(item => item.reverse())
 
-        // Remove old route
-        if (this.map.getLayer('route')) this.map.removeLayer('route')
-        if (this.map.getSource('route')) this.map.removeSource('route')
+        const geojson = {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+                type: 'LineString',
+                coordinates: coords
+            }
+        }
 
-        this.map.addSource('route', {
-            type: 'geojson',
-            data: {
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                    type: 'LineString',
-                    coordinates: coords
+        if (this.map.getSource('route')) {
+            this.map.getSource('route').setData(geojson)
+        } else {
+            this.map.addSource('route', {
+                type: 'geojson',
+                data: geojson
+            })
+
+            this.map.addLayer({
+                id: 'route',
+                type: 'line',
+                source: 'route',
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                paint: {
+                    'line-color': '#FF6464',
+                    'line-width': 4
                 }
-            }
-        })
+            });
 
-        this.map.addLayer({
-            id: 'route',
-            type: 'line',
-            source: 'route',
-            layout: {
-                'line-join': 'round',
-                'line-cap': 'round'
-            },
-            paint: {
-                'line-color': '#FF6464',
-                'line-width': 4
-            }
-        });
-
-        this.map.on('load', () => {
-            this.flightAcrossTheRoute(coords)
-        })
+        }
 
     }
-
-    static flightAcrossTheRoute(coords) {
-        return false;
-        let step = 0
-        setInterval(() => {
-            if (!coords[step]) clearInterval()
-            this.map.flyTo({ center: coords[step] })
-            step += 1
-        }, 100)
-    }
-
 }
 
 export default MapModel;

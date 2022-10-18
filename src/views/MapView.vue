@@ -25,13 +25,6 @@ export default {
     methods: {},
     computed: {},
     async created() {
-
-        if (this.$route.query.place) {
-            this.event = await EventsModel.getEvent(this.$route.query.place)
-        }
-
-        console.log(this.event);
-
     },
     async mounted() {
 

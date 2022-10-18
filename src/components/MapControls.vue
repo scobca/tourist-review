@@ -35,10 +35,8 @@ export default {
             this.query = ''
             this.suggestions = []
 
-            MapModel.buildRoute([
-                `${MapModel.userGeolocation.lat}, ${MapModel.userGeolocation.lon}`,
-                `${placeCoords.x}, ${placeCoords.y}`
-            ])
+            MapModel.buildRoute(`${placeCoords.x}, ${placeCoords.y}`)
+
         }
     }
 }
