@@ -9,7 +9,7 @@ class MapModel {
 
     static abort = new AbortController
 
-    static ratio = 1.5
+    static ratio = .5
     static filters = [
         "TOURISM",
         "POI",

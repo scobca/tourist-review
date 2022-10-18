@@ -33,13 +33,9 @@ export default {
             this.suggestions = (await PlaceModel.search(this.query.trim())).suggestions
         },
         async findPlace(name) {
-
-            const placeCoords = await PlaceModel.getByName(name)
-
-            this.query = ''
+            this.query = name
             this.suggestions = []
-
-            MapModel.buildRoute(`${placeCoords.x}, ${placeCoords.y}`)
+            MapModel.buildRoute(name)
 
         }
     }

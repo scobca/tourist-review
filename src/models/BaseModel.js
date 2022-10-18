@@ -16,7 +16,7 @@ class BaseModel {
                 options.method = options.method ?? 'POST'
             }
 
-            fetch(this.baseUrl + route, options)
+            fetch(this.baseUrl + encodeURI(route), options)
                 .then(resp => resp.json())
                 .then(data => resolve(data))
                 .catch(err => reject(err))
