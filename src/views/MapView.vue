@@ -13,27 +13,38 @@ import ContentLoader from '@/components/ContentLoader'
 import PageHeader from "@/components/PageHeader";
 import EventsModel from "@/models/EventsModel";
 import MapControls from "@/components/MapControls";
+import PlaceModel from "@/models/PlaceModel";
 
 export default {
     data() {
         return {
+            place: null,
             event: null,
             mapLoaded: false
         }
     },
-    props: ['coords', 'id'],
-    methods: {},
+    methods: {
+        async searchById(id) {
+            this.place = await PlaceModel.getById(id)
+            if (this.place?.coords) {
+                if (MapModel.userGeolocation) {
+                    MapModel.buildRoute(`${this.place.coords.lat}, ${this.place.coords.lon}`)
+                }
+            }
+            // this.$router.replace({'query': null});
+        }
+    },
     computed: {},
     async created() {
+        const id =this.$route.query?.place
+        if (id)  this.searchById(id)
+
     },
     async mounted() {
-
         MapModel.init();
-
         MapModel.map.on('load', () => {
             this.mapLoaded = true;
         })
-
     },
     components: {
         MapControls,

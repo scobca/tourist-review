@@ -8,12 +8,12 @@
             </h2>
 
             <div class="day-event__info">
-                <div class="day-event__card">
-                    <img :src="this?.event?.event?.images[0]?.image" alt="" class=day-event__image @click="openEvent">
+                <div class="day-event__card" @click="openEvent">
+                    <img :src="this?.event?.event?.images[0]?.image" alt="" class=day-event__image>
                     <div class="day-event__about">
                         <h3 class="day-event__subtitle"> {{ this.event?.event?.title }} </h3>
-                        <p class="day-event__description" v-html="this.event?.event?.description"></p>
-                        <button class="btn day-event__map" @click="openEvent"> На карту </button>
+<!--                        <p class="day-event__description" v-html="this.event?.event?.description"></p>-->
+<!--                        <button class="btn day-event__map" @click="openEvent"> На карту </button>-->
                     </div>
                 </div>
             </div>
@@ -40,9 +40,7 @@ export default {
         openEvent() {
             router.push({
                 name: 'map',
-                query: {
-                    place: this.event.event.id
-                }
+                query: { place: this.event.place?.id }
             })
         }
     }
@@ -53,13 +51,16 @@ export default {
 
 .day-event__container {
     padding-top: 120px;
-    padding-bottom: 120px;
+    padding-bottom: 80px;
 
 }
 
 .day-event__card {
     background: #ededed;
     border-radius: 16px;
+    display: grid;
+    cursor: pointer;
+    grid-template-columns: 3fr 5fr;
 }
 
 .day-event__title {
@@ -70,6 +71,8 @@ export default {
     border-radius: 16px;
     height: 300px;
     cursor: pointer;
+    aspect-ratio: 1;
+    object-fit: cover;
     background: #ededed;
 }
 
@@ -95,7 +98,7 @@ export default {
 }
 
 .day-event__subtitle {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 16px;
 }
 

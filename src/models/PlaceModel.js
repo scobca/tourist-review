@@ -8,7 +8,7 @@ class PlaceModel {
         return await BaseModel.request('map/location?' + new URLSearchParams({ q, loc }))
     }
     static async getById(id) {
-        return await BaseModel.request(`place?id=${id}`)
+        return await BaseModel.request(`event/place?id=${id}`)
     }
 }
 

@@ -76,7 +76,7 @@ class MapModel {
 
     }
 
-    static async buildRoute(destination=this.currentRoute) {
+    static async buildRoute(destination=this.currentRoute, departure='') {
 
         MapModel.currentRoute = destination;
 
@@ -92,7 +92,7 @@ class MapModel {
 
         const { latLonPoints } = await BaseModel.request('map/route', { body, signal: this.abort.signal  })
 
-
+        if (!latLonPoints) return false;
 
         const coords = latLonPoints.map(item => item.reverse())
 

@@ -9,12 +9,14 @@
 
             <input type="text" class="events__input" placeholder="Выставки, музеи.." @input="search">
 
-            <ul class="events__list">
-                <li class="events__item event" v-for="event in events">
-                    <img :src="event?.first_image?.image" alt="" class="event__image" v-if="event.first_image" @click="openEvent">
-                    <h3 class="event__title"> {{ event.title }} </h3>
-                    <p class="event__description" v-html="event.description"/>
-                    <button class="event__map" @click="openEvent"> На карту </button>
+            <ul class="events__list" >
+                <li class="events__item event" v-for="event in events" @click="openEvent(event, $event)">
+                    <template v-if="event.title">
+                        <img :src="event?.first_image?.image" alt="" class="event__image" v-if="event.first_image" @click="openEvent">
+                        <h3 class="event__title"> {{ event.title }} </h3>
+    <!--                    <p class="event__description" v-html="event.description"/>-->
+    <!--                    <button class="event__map" @click="openEvent"> На карту </button>-->
+                    </template>
                 </li>
             </ul>
 
@@ -39,12 +41,10 @@ export default {
                 this.events = await EventsModel.search(e.target.value);
             }
         },
-        openEvent() {
+        openEvent(place, event) {
             router.push({
                 name: 'map',
-                params: {
-                    coords: this.event.place.coords
-                }
+                query: { place: place.place?.id }
             })
         }
     }
@@ -68,7 +68,7 @@ export default {
 }
 
 .events__container {
-    padding-bottom: 240px;
+    padding-bottom: 120px;
 }
 
 .events__list {
@@ -77,27 +77,33 @@ export default {
     grid-gap: 16px;
 }
 
-
 .event {
     position: relative;
     width: 100%;
     background: #ededed;
     border-radius: 16px;
-    padding-bottom: 32px;
+    display: grid;
+    cursor: pointer;
+    grid-template-columns: 3fr 5fr;
+    overflow: hidden;
+    height: min-content ;
 }
 
 .event__image {
     width: 100%;
+    aspect-ratio: 1;
     border-radius: 16px;
-    height: 240px;
     object-fit: cover;
     cursor: pointer;
+    height: 100%;
 }
 
 .event__title {
-    padding: 24px;
-    font-size: 24px;
+    padding: 16px;
+    font-size: 18px;
     line-height: 1.1em;
+    width: 100%;
+    white-space: normal;
 }
 
 .event__description {
