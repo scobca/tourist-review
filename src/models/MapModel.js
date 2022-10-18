@@ -7,6 +7,8 @@ class MapModel {
 
     static map
 
+    static abort = new AbortController
+
     static ratio = 1.5
     static filters = [
         "TOURISM",
@@ -88,7 +90,7 @@ class MapModel {
             ratio: this.ratio
         }
 
-        const { latLonPoints } = await BaseModel.request('map/route', { body })
+        const { latLonPoints } = await BaseModel.request('map/route', { body, signal: this.abort.signal  })
 
 
 
@@ -128,6 +130,15 @@ class MapModel {
         }
 
     }
+
+    static deleteRoute() {
+        this.abort.abort();
+        this.abort = new AbortController();
+        if (this.map.getLayer('route')) this.map.removeLayer('route')
+        if (this.map.getSource('route')) this.map.removeSource('route')
+        this.currentRoute = '';
+    }
+
 }
 
 export default MapModel;

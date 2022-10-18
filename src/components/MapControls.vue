@@ -2,6 +2,7 @@
     <div class="map__controls">
         <form action="" class="map__form">
             <input class="map__input" type="text" placeholder="Куда" @input="searchPlace" v-model="query">
+            <button class="map__delete" @click.prevent="deleteRoute"> &cross; </button>
             <!--            <input class="map__submit" type="submit" value=">">-->
         </form>
         <ul class="suggestions">
@@ -23,6 +24,9 @@ export default {
         }
     },
     methods: {
+        deleteRoute() {
+            MapModel.deleteRoute()
+        },
         async searchPlace() {
             if (this.query.length < 3) return false
             if( this.query.length === 0) this.suggestions = []
@@ -43,11 +47,14 @@ export default {
 </script>
 
 <style scoped>
-.map__submit {
+.map__delete {
     background: var(--accent);
     color: white;
     height: 100%;
     display: flex;
+    border-radius: 8px  ;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -69,7 +76,7 @@ export default {
 .map__form {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 48px;
     grid-template-rows: 48px;
     grid-gap: 6px;
 }
