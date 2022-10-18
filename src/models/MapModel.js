@@ -70,7 +70,7 @@ class MapModel {
 
 
         this.geolocateControls.on('geolocate', function(e) {
-            if (MapModel.currentRoute) MapModel.buildRoute()
+            // if (MapModel.currentRoute) MapModel.buildRoute()
             const lon = e.coords.longitude;
             const lat = e.coords.latitude
             MapModel.userGeolocation = `${lat}, ${lon}`;
@@ -161,6 +161,7 @@ class MapModel {
         this.abort.abort();
         this.abort = new AbortController();
         if (this.map.getLayer('route')) this.map.removeLayer('route')
+        if (this.map.getLayer('routeline-active')) this.map.removeLayer('routeline-active')
         if (this.map.getSource('route')) this.map.removeSource('route')
         this.currentRoute = '';
     }

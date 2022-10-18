@@ -31,16 +31,22 @@ export default {
     },
     methods: {
         deleteRoute() {
+            this.geo = ''
+            this.query = ''
+            this.suggestions = []
+            this.geolocations = []
             MapModel.deleteRoute()
         },
         async searchPlace() {
             if (this.query.length < 3) return false
             if( this.query.length === 0) this.suggestions = []
+            this.geolocations = []
             this.suggestions = (await PlaceModel.search(this.query.trim())).suggestions
         },
         async searchGeo() {
             if (this.geo.length < 3) return false
-            if( this.geo.length === 0) this.suggestions = []
+            if( this.geo.length === 0) this.geolocations = []
+            this.suggestions = []
             this.geolocations = (await PlaceModel.search(this.geo.trim())).suggestions
             this.geolocations.unshift('Моё местоположение')
         },
@@ -48,6 +54,17 @@ export default {
             this.geo = name;
             this.suggestions = []
             this.geolocations = []
+
+             const geo = this.geo === 'Моё местоположение' ? MapModel.userGeolocation : this.geo;
+
+            if (this.geo && this.query) {
+                MapModel.buildRoute(
+                    this.query,
+                    geo
+                )
+            }
+
+
         },
         async findPlace(name) {
             this.query = name
@@ -56,10 +73,12 @@ export default {
 
             const geo = this.geo === 'Моё местоположение' ? MapModel.userGeolocation : this.geo;
 
-            MapModel.buildRoute(
-                this.query,
-                geo
-            )
+            if (this.geo && this.query) {
+                MapModel.buildRoute(
+                    this.query,
+                    geo
+                )
+            }
 
             //
             // if (MapModel.userGeolocation.lat && MapModel.userGeolocation.lon) {
