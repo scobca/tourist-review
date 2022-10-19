@@ -36,7 +36,7 @@ class MapModel {
             bearing: 150,
             style: 'mapbox://styles/kosakura/cl9bpvqqr002n15nlxbmrsmdm?optimize=true', // Specify which map style to use?
             center: [30.315644, 59.938955], // Specify the starting position
-            zoom: 15, // Specify the starting zoom,
+            zoom: 1, // Specify the starting zoom,
             projection: 'globe'
         });
 
@@ -62,12 +62,6 @@ class MapModel {
         this.map.on('load', () => {
             document.querySelector('.mapboxgl-ctrl-geolocate').style.display = 'none';
             this.geolocateControls.trigger();
-            this.map.flyTo({
-                center: [30.315644, 59.938955],
-                zoom: 15,
-                essential: true // this animation is considered essential with respect to prefers-reduced-motion
-            });
-
         })
 
     }
