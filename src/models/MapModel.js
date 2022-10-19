@@ -61,6 +61,7 @@ class MapModel {
 
         this.map.on('load', () => {
             document.querySelector('.mapboxgl-ctrl-geolocate').style.display = 'none';
+            document.querySelector('.mapboxgl-ctrl-bottom-left').style.display = 'none'
             this.geolocateControls.trigger();
         })
 
