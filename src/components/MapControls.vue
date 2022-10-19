@@ -14,11 +14,11 @@
             </div>
             <div class="options">
                 <form action="" class="options__form">
-                    <input id="msc" name="city" type="radio" v-model="city" class="options__input">
+                    <input id="msc" name="city" value="msk" type="radio" v-model="city" class="options__input">
                     <label for="msc" class="options__label">Москва</label>
-                    <input id="spb" name="city" type="radio" v-model="city" class="options__input">
+                    <input id="spb" name="city" value="spb" type="radio" v-model="city" class="options__input">
                     <label for="spb" class="options__label">Питер</label>
-                    <input id="kzn" name="city" type="radio" v-model="city" class="options__input">
+                    <input id="kzn" name="city" value="kzn" type="radio" v-model="city" class="options__input">
                     <label for="kzn" class="options__label">Казань</label>
                 </form>
             </div>
@@ -67,9 +67,9 @@ export default {
 
             if (this.query && this.departure) {
                 if (this.departure === 'Моё местоположение') {
-                    MapModel.buildRoute(this.query, MapModel.userGeolocation)
+                    MapModel.buildRoute(this.query, MapModel.userGeolocation, this.city)
                 } else {
-                    MapModel.buildRoute(this.query, this.departure)
+                    MapModel.buildRoute(this.query, this.departure, this.city)
                 }
             }
 

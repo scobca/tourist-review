@@ -72,12 +72,12 @@ class MapModel {
 
     }
 
-    static async buildRoute(destination=this.currentRoute, departure='') {
+    static async buildRoute(destination=this.currentRoute, departure='', loc='spb') {
 
         MapModel.currentRoute = destination;
 
         const body = {
-            loc: 'spb',
+            loc,
             points: [
                 destination,
                 departure ?? this.userGeolocation,
