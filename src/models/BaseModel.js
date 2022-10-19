@@ -1,6 +1,6 @@
 class BaseModel {
 
-    static baseUrl = 'https://turist-ru.herokuapp.com/api/'
+    static baseUrl = 'https://turist-ru-2.herokuapp.com/api/'
 
     static request(route, options={}) {
         return new Promise((resolve, reject) => {

@@ -1,10 +1,10 @@
 import BaseModel from "@/models/BaseModel";
 
 class PlaceModel {
-    static async search(q, loc='spb') {
+    static async search(q, loc='kzn') {
         return await BaseModel.request('map/suggest?' + new URLSearchParams({ q, loc }))
     }
-    static async getByName(q, loc='spb') {
+    static async getByName(q, loc='kzn') {
         return await BaseModel.request('map/location?' + new URLSearchParams({ q, loc }))
     }
     static async getById(id) {

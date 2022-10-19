@@ -1,5 +1,6 @@
 import BaseModel from "@/models/BaseModel";
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
+import PlaceModel from "@/models/PlaceModel";
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoia29zYWt1cmEiLCJhIjoiY2p4eDR4am8yMDk3czNicGo4dmVmbDE2OSJ9.0eys6-WKigotzfUlrhoLLA';
 
@@ -33,26 +34,12 @@ class MapModel {
             antialias: true,
             pitch: 60,
             bearing: 150,
-            // style: 'mapbox://styles/mapbox/satellite-v9', // Specify which map style to use?
             style: 'mapbox://styles/kosakura/cl9bpvqqr002n15nlxbmrsmdm?optimize=true', // Specify which map style to use?
             center: [30.315644, 59.938955], // Specify the starting position
             zoom: 15, // Specify the starting zoom,
             projection: 'globe'
         });
 
-        this.map.on('load', () => {
-            this.getUserGeo();
-            this.map.flyTo({
-                center: [30.315644, 59.938955],
-                zoom: 15,
-                essential: true // this animation is considered essential with respect to prefers-reduced-motion
-            });
-
-        })
-
-    }
-
-    static async getUserGeo() {
 
         this.geolocateControls = new mapboxgl.GeolocateControl({
             positionOptions: {
@@ -64,10 +51,6 @@ class MapModel {
         })
 
         this.map.addControl(this.geolocateControls);
-        setTimeout(function() {
-            document.querySelector('.mapboxgl-ctrl-geolocate').click()
-        }, 200)
-
 
         this.geolocateControls.on('geolocate', function(e) {
             // if (MapModel.currentRoute) MapModel.buildRoute()
@@ -75,6 +58,17 @@ class MapModel {
             const lat = e.coords.latitude
             MapModel.userGeolocation = `${lat}, ${lon}`;
         });
+
+        this.map.on('load', () => {
+            document.querySelector('.mapboxgl-ctrl-geolocate').style.display = 'none';
+            this.geolocateControls.trigger();
+            this.map.flyTo({
+                center: [30.315644, 59.938955],
+                zoom: 15,
+                essential: true // this animation is considered essential with respect to prefers-reduced-motion
+            });
+
+        })
 
     }
 
@@ -92,11 +86,12 @@ class MapModel {
             ratio: this.ratio
         }
 
-        const { latLonPoints } = await BaseModel.request('map/route', { body, signal: this.abort.signal  })
+        const data = await BaseModel.request('map/route', { body, signal: this.abort.signal  })
 
-        if (!latLonPoints) return false;
 
-        const coords = latLonPoints.map(item => item.reverse())
+        if (!data.latLonPoints) return false;
+
+        const coords = data.latLonPoints.map(item => item.reverse())
 
         const geojson = {
             type: 'Feature',
@@ -106,6 +101,13 @@ class MapModel {
                 coordinates: coords
             }
         }
+
+        data.sightAreas.forEach(area => {
+            new mapboxgl.Marker({
+                color: "#FFFFFF",
+                draggable: false
+            }).setLngLat(area.centroid.reverse()).setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>")).addTo(this.map);
+        })
 
         if (this.map.getSource('route')) {
             this.map.getSource('route').setData(geojson)
@@ -152,6 +154,12 @@ class MapModel {
                 },
                 'waterway-label'
             );
+
+            this.map.flyTo({
+                center: coords[0]
+            })
+
+            return true;
 
         }
 

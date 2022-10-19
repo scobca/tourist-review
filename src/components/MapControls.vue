@@ -1,169 +1,273 @@
 <template>
-    <div class="map__controls">
-        <form action="" class="map__form">
-            <input class="map__input" type="text" placeholder="Куда" @input="searchPlace" v-model="query">
-            <button class="map__delete " @click.prevent="deleteRoute"> &cross; </button>
-            <input class="map__input map__geo" type="text" placeholder="Откуда" @input="searchGeo" v-model="geo">
-            <!--            <input class="map__submit" type="submit" value=">">-->
-        </form>
-        <ul class="suggestions">
-            <li class="suggest" v-for="suggest in suggestions" @click="findPlace(suggest)"> {{ suggest }} </li>
-        </ul>
-        <ul class="suggestions">
-            <li class="suggest" v-for="suggest in geolocations" @click="findGeo(suggest)"> {{ suggest }} </li>
-        </ul>
+    <div class="controls" :class="{ 'controls_options': showOptions, 'controls_search': showSearch }">
+        <div class="suggestions">
+            <div class="suggest" v-for="suggest in suggestions" @click="selectSuggest(suggest)">{{ suggest }}</div>
+        </div>
+        <div class="controls__desk">
+            <button class="controls__nav controls__icon" @click="geolocate"><i class="fa-solid fa-location-arrow"></i></button>
+            <input type="text" class="controls__search" placeholder="Поиск" v-model="query" @focus="openSearch('query')" @blur="closeSearch" @input="loadSuggestions(this.query)">
+            <button class="controls__settings controls__icon" :class="{ 'controls__settings_active': showOptions }" @click="toggleOptions"><i class="fa-solid fa-gear"></i></button>
+        </div>
+        <div class="controls__info">
+            <div class="search">
+                <input type="text" class="controls__from" placeholder="Откуда" v-model="departure" @focus="openSearch('departure')" @blur="closeSearch" @input="loadSuggestions(this.departure)">
+            </div>
+            <div class="options">
+                <form action="" class="options__form">
+                    <input id="msc" name="city" type="radio" v-model="city" class="options__input">
+                    <label for="msc" class="options__label">Москва</label>
+                    <input id="spb" name="city" type="radio" v-model="city" class="options__input">
+                    <label for="spb" class="options__label">Питер</label>
+                    <input id="kzn" name="city" type="radio" v-model="city" class="options__input">
+                    <label for="kzn" class="options__label">Казань</label>
+                </form>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import PlaceModel from "@/models/PlaceModel";
 import MapModel from "@/models/MapModel";
+import ModalLoader from "@/components/ModalLoader";
+import { debounce } from "lodash";
 
 export default {
     name: "MapControls",
+    components: {ModalLoader},
     data() {
         return {
-            geo: '',
+            showOptions: false,
+            showSearch: false,
             query: '',
+            departure: '',
+            city: 'kzn',
             suggestions: [],
-            geolocations: []
+            currentField: '',
         }
     },
     methods: {
-        deleteRoute() {
-            this.geo = ''
-            this.query = ''
-            this.suggestions = []
-            this.geolocations = []
-            MapModel.deleteRoute()
+        toggleOptions() {
+            this.showOptions = !this.showOptions
         },
-        async searchPlace() {
-            if (this.query.length < 3) return false
-            if( this.query.length === 0) this.suggestions = []
-            this.geolocations = []
-            this.suggestions = (await PlaceModel.search(this.query.trim())).suggestions
+        openSearch(type) {
+            this.currentField = type;
+            this.showSearch = true
+            this.showOptions = false;
         },
-        async searchGeo() {
-            if (this.geo.length < 3) return false
-            if( this.geo.length === 0) this.geolocations = []
-            this.suggestions = []
-            this.geolocations = (await PlaceModel.search(this.geo.trim())).suggestions
-            this.geolocations.unshift('Моё местоположение')
+        closeSearch() {
+            this.showSearch = false
         },
-        async findGeo(name) {
-            this.geo = name;
-            this.suggestions = []
-            this.geolocations = []
+        geolocate() {
+            MapModel.geolocateControls.trigger();
+        },
+        selectSuggest(suggest) {
+            this.suggestions = [];
+            this[this.currentField] = suggest;
 
-             const geo = this.geo === 'Моё местоположение' ? MapModel.userGeolocation : this.geo;
-
-            if (this.geo && this.query) {
-                MapModel.buildRoute(
-                    this.query,
-                    geo
-                )
+            if (this.query && this.departure) {
+                if (this.departure === 'Моё местоположение') {
+                    MapModel.buildRoute(this.query, MapModel.userGeolocation)
+                } else {
+                    MapModel.buildRoute(this.query, this.departure)
+                }
             }
 
-
         },
-        async findPlace(name) {
-            this.query = name
-            this.suggestions = []
-            this.geolocations = []
-
-            const geo = this.geo === 'Моё местоположение' ? MapModel.userGeolocation : this.geo;
-
-            if (this.geo && this.query) {
-                MapModel.buildRoute(
-                    this.query,
-                    geo
-                )
+        loadSuggestions: debounce( async function (query) {
+            if (query.length < 3) this.suggestions = []
+            else {
+                this.suggestions = (await PlaceModel.search(query, this.city)).suggestions.slice(0, 2);
+                this.suggestions.push('Моё местоположение')
             }
-
-            //
-            // if (MapModel.userGeolocation.lat && MapModel.userGeolocation.lon) {
-            //     MapModel.buildRoute(name)
-            // } else MapModel.buildRoute(name, this.geo)
-
-        }
+        }, 300)
     }
 }
 </script>
 
 <style scoped>
-.map__geo {
-    grid-column: 1/-1;
-}
 
-.map__delete {
-    background: var(--accent);
-    color: white;
-    height: 100%;
-    display: flex;
-    border-radius: 8px  ;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.map__controls {
-    border-radius: 8px 8px 0 0;
-    background: transparent;
-    grid-gap: 8px;
+.controls {
     position: fixed;
-    top: 0;
-    padding:  16px;
+    bottom: 24px;
+    left: 16px;
+    right: 16px;
+    transition: transform .3s;
+    transform: translateY(64px);
+}
+
+.controls__settings_active {
+    color: #3887be !important;
+}
+
+.options, .search {
+    position: absolute;
+}
+
+.controls__info {
+    position: relative;
+    height: 56px;
+}
+
+.controls_options {
+    transform: translateY(0);
+}
+
+.controls_options .search {
+    display: none;
+}
+
+.controls_search .options {
+    display: none;
+}
+
+.controls_search .search {
+    opacity: 1;
+}
+
+.controls_search {
+    transform: translateY(0);
+}
+
+.controls_options .options {
+    margin-top: 8px;
+}
+
+.controls_search .search {
+    margin-top: 8px;
+}
+
+.controls__desk {
+    height: 56px;
     width: 100%;
+    padding: 4px;
+    background: white;
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: 48px 1fr 48px;
+    justify-content: center;
+    align-items: center;
+}
+
+.controls__icon {
+    height: 100%;
+    font-size: 18px;
+    color: #aeaeae;
+}
+
+.controls__icon:hover {
+    color: #3887be;
+}
+
+.controls__search {
+    outline: none;
+    height: 100%;
+    width: 100%;
+    background: #f8f8f8;
     text-align: center;
+}
+
+
+
+.controls__from::placeholder,
+.controls__search::placeholder {
+    color: #aeaeae;
+    transition: .3s;
+}
+
+.controls__from:focus::placeholder,
+.controls__search:focus::placeholder {
+    opacity: 0;
+}
+
+.controls__from {
+    outline: none;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.search,
+.options {
+    width: 100%;
+    height: 56px;
+    background: white;
+    border-radius: 12px;
+    margin-top: 24px;
+    overflow: hidden;
+    transition: all .3s;
+}
+
+.options__form {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    align-items: center;
+}
+
+.options__input {
+    display: none;
+}
+
+.options__input:checked + .options__label {
+    color: #3887be;
+}
+
+.options__label {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+
+    height: 100%;
+    font-family: "Open Sans";
+    text-align: center;
+    cursor: pointer;
 }
 
-.map__form {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 48px;
-    grid-template-rows: 48px 48px;
-    grid-gap: 6px;
+.options__label:hover {
 }
 
 .suggestions {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 8px;
-    max-height: 30vh;
-    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 16px;
 }
 
+/*.suggestions::after {*/
+/*    content: '';*/
+/*    height: 2px;*/
+/*    width: 60%;*/
+/*    background: #f8f8f8;*/
+/*    margin: 0 auto;*/
+/*}*/
+
 .suggest {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+    height: 56px;
     width: 100%;
-    padding: 16px;
-    border-radius: 8px;
+
+    padding: 8px 16px;
+
+    border-radius: 12px;
+    background: #f8f8f8;
+    font-family: "Open Sans";
     text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
     cursor: pointer;
-    background: white;
 }
 
 .suggest:hover {
-    background: #ededed;
+    color: #3887be;
 }
 
-.map__input {
-    width: 100%;
-    outline: none;
-    background: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 24px;
-    height: 100%;
-    font-size: 16px;
-    font-family: "IBM Plex Serif", sans-serif;
-}
-
-.map__input::placeholder {
-    color: #858585;
-}
 </style>

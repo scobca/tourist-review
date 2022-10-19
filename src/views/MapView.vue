@@ -1,7 +1,7 @@
 <template>
-    <content-loader v-show="!mapLoaded"/>
+    <content-loader v-show="!mapLoaded "/>
     <section class="map">
-        <div id="map"></div>
+        <div id="map"/>
         <MapControls/>
     </section>
 </template>
@@ -14,6 +14,7 @@ import PageHeader from "@/components/PageHeader";
 import EventsModel from "@/models/EventsModel";
 import MapControls from "@/components/MapControls";
 import PlaceModel from "@/models/PlaceModel";
+import ModalLoader from "@/components/ModalLoader";
 
 export default {
     data() {
@@ -47,6 +48,7 @@ export default {
         })
     },
     components: {
+        ModalLoader,
         MapControls,
         PageHeader,
         'content-loader': ContentLoader
