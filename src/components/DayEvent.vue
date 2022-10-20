@@ -12,7 +12,7 @@
                     <img :src="this?.event?.event?.images[0]?.image" alt="" class=day-event__image>
                     <div class="day-event__about">
                         <h3 class="day-event__subtitle"> {{ this.event?.event?.title }} </h3>
-<!--                        <p class="day-event__description" v-html="this.event?.event?.description"></p>-->
+                        <p class="day-event__description" v-html="this.event?.event?.description"></p>
 <!--                        <button class="btn day-event__map" @click="openEvent"> На карту </button>-->
                     </div>
                 </div>
@@ -98,8 +98,12 @@ export default {
 }
 
 .day-event__subtitle {
-    font-size: 20px;
+    font-size: 32px;
     margin-bottom: 16px;
+}
+
+.day-event__subtitle::first-letter {
+    text-transform: uppercase;
 }
 
 .day-event__description {

@@ -10,7 +10,7 @@
         </div>
         <div class="controls__info">
             <div class="search">
-                <input type="text" class="controls__from" placeholder="Откуда" v-model="departure" @focus="openSearch('departure')" @blur="closeSearch" @input="loadSuggestions(this.departure)">
+                <input type="text" class="controls__from" placeholder="Откуда" ref="fromInput" v-model="departure" @focus="openSearch('departure')" @blur="closeSearch" @input="loadSuggestions(this.departure)">
             </div>
             <div class="options">
                 <form action="#" class="options__form">
@@ -23,7 +23,7 @@
                 </form>
                 <form action="#" class="options__ratio">
                     <span class="options__title">Кол-во интересных мест</span>
-                    <input type="range" v-model="ratio" min="0" max="1.5" step=".5" class="options__range">
+                    <input type="range" v-model="ratio" min="0" max="1.5" step=".5" class="options__range" @change="buildRoute">
                 </form>
                 <form action="#" class="options__type">
                     <span class="options__title">Вид маршрута</span>
@@ -62,6 +62,15 @@ export default {
         }
     },
     methods: {
+        buildRoute() {
+            if (this.query && this.departure) {
+                if (this.departure === 'Моё местоположение') {
+                    MapModel.buildRoute(this.query, MapModel.userGeolocation, this.city, this.ratio)
+                } else {
+                    MapModel.buildRoute(this.query, this.departure, this.city, this.ratio)
+                }
+            }
+        },
         toggleOptions() {
             this.showOptions = !this.showOptions
         },
@@ -79,15 +88,8 @@ export default {
         selectSuggest(suggest) {
             this.suggestions = [];
             this[this.currentField] = suggest;
-
-            if (this.query && this.departure) {
-                if (this.departure === 'Моё местоположение') {
-                    MapModel.buildRoute(this.query, MapModel.userGeolocation, this.city, this.ratio)
-                } else {
-                    MapModel.buildRoute(this.query, this.departure, this.city, this.ratio)
-                }
-            }
-
+            if (this.currentField === 'query') this.$refs.fromInput.focus()
+            this.buildRoute();
         },
         loadSuggestions: debounce( async function (query) {
             if (query.length < 3) this.suggestions = []
@@ -290,7 +292,7 @@ export default {
 }
 
 .suggest:hover {
-    color: #3887be;
+        color: #3887be;
 }
 
 .options__title {

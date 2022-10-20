@@ -1,6 +1,7 @@
 import BaseModel from "@/models/BaseModel";
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
 import PlaceModel from "@/models/PlaceModel";
+import store from "@/store";
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoia29zYWt1cmEiLCJhIjoiY2p4eDR4am8yMDk3czNicGo4dmVmbDE2OSJ9.0eys6-WKigotzfUlrhoLLA';
 
@@ -106,7 +107,10 @@ class MapModel {
             const marker = new mapboxgl.Marker({
                 color: "#FFFFFF",
                 draggable: false
-            }).setLngLat(area.centroid.reverse()).setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>")).addTo(this.map);
+            }).setLngLat(area.centroid.reverse()).addTo(this.map);
+            marker.getElement().addEventListener('click', function () {
+                store.commit('setPoi', area)
+            });
             MapModel.markers.push(marker);
         })
 

@@ -4,7 +4,8 @@ export default createStore({
   state() {
     return {
       token: localStorage.getItem('token'),
-      menu: false
+      menu: false,
+      poi: {}
     }
   },
   getters: {
@@ -18,6 +19,9 @@ export default createStore({
     },
     updateToken(state, token) {
       state.token = token;
+    },
+    setPoi(state, area) {
+      state.poi = area
     }
   },
   actions: {

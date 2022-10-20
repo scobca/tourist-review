@@ -1,8 +1,9 @@
 <template>
-    <content-loader v-show="!mapLoaded "/>
+    <content-loader v-show="!mapLoaded"/>
     <section class="map">
         <div id="map"/>
         <MapControls/>
+        <POICard v-show="store.state.poi.name"/>
     </section>
 </template>
 
@@ -15,10 +16,13 @@ import EventsModel from "@/models/EventsModel";
 import MapControls from "@/components/MapControls";
 import PlaceModel from "@/models/PlaceModel";
 import ModalLoader from "@/components/ModalLoader";
+import POICard from "@/components/POICard";
+import store from "@/store";
 
 export default {
     data() {
         return {
+            store,
             place: null,
             event: null,
             mapLoaded: false
@@ -48,6 +52,7 @@ export default {
         })
     },
     components: {
+        POICard,
         ModalLoader,
         MapControls,
         PageHeader,
