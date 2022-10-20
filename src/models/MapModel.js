@@ -23,6 +23,8 @@ class MapModel {
         "MONUMENT"
     ]
 
+    static markers = []
+
     static userGeolocation = {}
 
     static init() {
@@ -83,8 +85,11 @@ class MapModel {
 
         const data = await BaseModel.request('map/route', { body, signal: this.abort.signal  })
 
-
         if (!data.latLonPoints) return false;
+
+        if (this.markers.length) {
+            this.markers.forEach(marker => marker.remove())
+        }
 
         const coords = data.latLonPoints.map(item => item.reverse())
 
@@ -98,10 +103,11 @@ class MapModel {
         }
 
         data.sightAreas.forEach(area => {
-            new mapboxgl.Marker({
+            const marker = new mapboxgl.Marker({
                 color: "#FFFFFF",
                 draggable: false
             }).setLngLat(area.centroid.reverse()).setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>")).addTo(this.map);
+            MapModel.markers.push(marker);
         })
 
         if (this.map.getSource('route')) {
@@ -150,13 +156,14 @@ class MapModel {
                 'waterway-label'
             );
 
-            this.map.flyTo({
-                center: coords[0]
-            })
-
-            return true;
 
         }
+
+        this.map.flyTo({
+            center: coords[0]
+        })
+
+        return true;
 
     }
 
