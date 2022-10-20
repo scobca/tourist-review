@@ -67,18 +67,18 @@ class MapModel {
 
     }
 
-    static async buildRoute(destination=this.currentRoute, departure='', loc='spb') {
+    static async buildRoute(destination=this.currentRoute, departure='', loc='spb', ratio=this.ratio) {
 
         MapModel.currentRoute = destination;
 
         const body = {
             loc,
+            ratio,
             points: [
                 destination,
                 departure ?? this.userGeolocation,
             ],
             filters: this.filters,
-            ratio: this.ratio
         }
 
         const data = await BaseModel.request('map/route', { body, signal: this.abort.signal  })

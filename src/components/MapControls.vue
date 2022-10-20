@@ -13,13 +13,26 @@
                 <input type="text" class="controls__from" placeholder="Откуда" v-model="departure" @focus="openSearch('departure')" @blur="closeSearch" @input="loadSuggestions(this.departure)">
             </div>
             <div class="options">
-                <form action="" class="options__form">
+                <form action="#" class="options__form">
                     <input id="msc" name="city" value="msk" type="radio" v-model="city" class="options__input">
                     <label for="msc" class="options__label">Москва</label>
                     <input id="spb" name="city" value="spb" type="radio" v-model="city" class="options__input">
                     <label for="spb" class="options__label">Питер</label>
                     <input id="kzn" name="city" value="kzn" type="radio" v-model="city" class="options__input">
                     <label for="kzn" class="options__label">Казань</label>
+                </form>
+                <form action="#" class="options__ratio">
+                    <span class="options__title">Кол-во интересных мест</span>
+                    <input type="range" v-model="ratio" min="0" max="1.5" step=".5" class="options__range">
+                </form>
+                <form action="#" class="options__type">
+                    <span class="options__title">Вид маршрута</span>
+                    <div class="options__type-wrap">
+                        <input id="direct" name="city" value="direct" type="radio" v-model="routeType" class="options__input">
+                        <label for="direct" class="options__label"> Прямой </label>
+                        <input id="circle" name="city" value="circle" type="radio" v-model="routeType" class="options__input">
+                        <label for="circle" class="options__label"> Круговой </label>
+                    </div>
                 </form>
             </div>
         </div>
@@ -44,6 +57,8 @@ export default {
             city: 'kzn',
             suggestions: [],
             currentField: '',
+            ratio: .5,
+            routeType: 'direct'
         }
     },
     methods: {
@@ -67,9 +82,9 @@ export default {
 
             if (this.query && this.departure) {
                 if (this.departure === 'Моё местоположение') {
-                    MapModel.buildRoute(this.query, MapModel.userGeolocation, this.city)
+                    MapModel.buildRoute(this.query, MapModel.userGeolocation, this.city, this.ratio)
                 } else {
-                    MapModel.buildRoute(this.query, this.departure, this.city)
+                    MapModel.buildRoute(this.query, this.departure, this.city, this.ratio)
                 }
             }
 
@@ -110,7 +125,7 @@ export default {
 }
 
 .controls_options {
-    transform: translateY(0);
+    transform: translateY(-160px);
 }
 
 .controls_options .search {
@@ -190,7 +205,6 @@ export default {
 .search,
 .options {
     width: 100%;
-    height: 56px;
     background: white;
     border-radius: 12px;
     margin-top: 24px;
@@ -199,11 +213,19 @@ export default {
 }
 
 .options__form {
-    height: 100%;
+}
+
+.search {
+    height: 56px;
+}
+
+.options__form {
+    height: 56px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-content: center;
     align-items: center;
+    border-bottom: 1px solid #ededed;
 }
 
 .options__input {
@@ -226,6 +248,7 @@ export default {
 }
 
 .options__label:hover {
+    color: #3887be;
 }
 
 .suggestions {
@@ -268,6 +291,31 @@ export default {
 
 .suggest:hover {
     color: #3887be;
+}
+
+.options__title {
+    padding-top: 14px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: "Open Sans";
+    color: #858585;
+}
+
+.options__ratio {
+    border-bottom: 1px solid #ededed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.options__type-wrap {
+    height: 56px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
 </style>
