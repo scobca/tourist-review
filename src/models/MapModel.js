@@ -108,6 +108,7 @@ class MapModel {
     static deleteRoute() {
         this.abort.abort();
         this.abort = new AbortController();
+        if (this.markers.length) this.markers.forEach(marker => marker.remove())
         if (this.map.getLayer('route')) this.map.removeLayer('route')
         if (this.map.getLayer('routeline-active')) this.map.removeLayer('routeline-active')
         if (this.map.getSource('route')) this.map.removeSource('route')
@@ -120,7 +121,6 @@ class MapModel {
         if (!data.latLonPoints) return false;
 
         if (this.markers.length) this.markers.forEach(marker => marker.remove())
-
 
         const coords = data.latLonPoints.map(item => item.reverse())
 

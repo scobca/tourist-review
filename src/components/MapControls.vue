@@ -1,8 +1,11 @@
 <template>
     <div class="information" v-show="Object.keys($store.state.route).length">
         <div class="information__distance"> {{ Math.round($store.state.route.distanceInMeters) }} м </div>
-        <div class="information__time"> {{ Math.round($store.state.route.timeInMinutes) }} <i class="fa-regular fa-clock"></i> </div>
-        <button @click="Map.deleteRoute" class="information__delete"><i class="fa-solid fa-trash"></i></button>
+        <div class="information__time"> {{ Math.round($store.state.route.timeInMinutes) }}
+            мин
+<!--            <i class="fa-regular fa-clock"></i> -->
+        </div>
+        <button @click="deleteRoute" class="information__delete"><i class="fa-solid fa-trash"></i></button>
     </div>
     <div class="controls" :class="{ 'controls_options': showOptions, 'controls_search': showSearch, 'controls_circle': routeType === 'circle' }">
         <div class="suggestions">
@@ -83,6 +86,9 @@ export default {
                     }
                 }
             }
+        },
+        deleteRoute() {
+            MapModel.deleteRoute()
         },
         toggleOptions() {
             this.showOptions = !this.showOptions
