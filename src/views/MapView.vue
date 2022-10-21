@@ -34,7 +34,7 @@ export default {
             this.place = await PlaceModel.getById(id)
             if (this.place?.coords) {
                 if (MapModel.userGeolocation) {
-                    MapModel.buildRoute(`${this.place.coords.lat}, ${this.place.coords.lon}`)
+                    MapModel.buildRoute(`${this.place.coords.lat}, ${this.place.coords.lon}`, MapModel.userGeolocation)
                 }
             }
             // this.$router.replace({'query': null});
@@ -42,14 +42,14 @@ export default {
     },
     computed: {},
     async created() {
-        const id =this.$route.query?.place
-        if (id)  this.searchById(id)
-
     },
     async mounted() {
         MapModel.init();
         MapModel.map.on('load', () => {
             this.mapLoaded = true;
+            const id = this.$route.query?.place
+            if (id) this.searchById(id)
+
         })
     },
     components: {
