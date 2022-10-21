@@ -1,6 +1,5 @@
 import BaseModel from "@/models/BaseModel";
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
-import PlaceModel from "@/models/PlaceModel";
 import store from "@/store";
 import _ from "lodash";
 

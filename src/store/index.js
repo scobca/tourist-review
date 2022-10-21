@@ -6,7 +6,8 @@ export default createStore({
       token: localStorage.getItem('token'),
       menu: false,
       poi: {},
-      route: {}
+      route: {},
+      dataLoading: false,
     }
   },
   getters: {
@@ -26,6 +27,9 @@ export default createStore({
     },
     updateRoute(state, route) {
       state.route = route;
+    },
+    setLoadingStatus(state, status) {
+      state.dataLoading = status
     }
   },
   actions: {

@@ -3,6 +3,7 @@
     <section class="map">
         <div id="map"/>
         <MapControls/>
+        <ModalLoader v-show="$store.state.dataLoading"/>
         <POICard v-show="store.state.poi.name"/>
     </section>
 </template>

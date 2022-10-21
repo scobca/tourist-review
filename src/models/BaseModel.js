@@ -1,3 +1,5 @@
+import store from "@/store";
+
 class BaseModel {
 
     static baseUrl = 'https://turist-ru-1.herokuapp.com/api/'
@@ -20,7 +22,7 @@ class BaseModel {
             fetch(this.baseUrl + encodeURI(route), options)
                 .then(resp => resp.json())
                 .then(data => resolve(data))
-                .catch(err => reject(err))
+                .catch(err => reject(err));
 
         })
     }

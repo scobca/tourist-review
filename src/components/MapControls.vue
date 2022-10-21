@@ -3,7 +3,7 @@
         <div class="information__distance"> {{ Math.round($store.state.route.distanceInMeters) }} м </div>
         <div class="information__time"> {{ Math.round($store.state.route.timeInMinutes) }}
             мин
-<!--            <i class="fa-regular fa-clock"></i> -->
+            <!--            <i class="fa-regular fa-clock"></i> -->
         </div>
         <button @click="deleteRoute" class="information__delete"><i class="fa-solid fa-trash"></i></button>
     </div>
@@ -56,6 +56,7 @@ import PlaceModel from "@/models/PlaceModel";
 import MapModel from "@/models/MapModel";
 import ModalLoader from "@/components/ModalLoader";
 import { debounce } from "lodash";
+import store from "@/store";
 
 export default {
     name: "MapControls",
@@ -75,15 +76,25 @@ export default {
             minutes: 60
         }
     },
+    watch: {
+        city(newCity, oldCity) {
+            MapModel.map.flyTo({
+                center: this.city === 'msk' ? [37.617698, 55.755864] : this.city === 'spb' ? [30.315877, 59.939099] : [49.106414, 55.796127],
+                zoom: 10
+            })
+        }
+    },
     methods: {
         async buildRoute() {
             if (this.departure) {
                 if ((this.routeType === 'direct' && this.query) || this.routeType === 'circle' ) {
+                    store.commit('setLoadingStatus', true)
                     if (this.departure === 'Моё местоположение') {
                         this.buildedRoute = await MapModel.buildRoute(this.query, MapModel.userGeolocation, this.city, this.ratio, this.routeType, this.minutes   )
                     } else {
                         this.buildedRoute = await MapModel.buildRoute(this.query, this.departure, this.city, this.ratio, this.routeType, this.minutes )
                     }
+                    store.commit('setLoadingStatus', false)
                 }
             }
         },
@@ -113,8 +124,10 @@ export default {
         loadSuggestions: debounce( async function (query) {
             if (query.length < 3) this.suggestions = []
             else {
+                store.commit('setLoadingStatus', true)
                 this.suggestions = (await PlaceModel.search(query, this.city)).suggestions.slice(0, 2);
                 this.suggestions.push('Моё местоположение')
+                store.commit('setLoadingStatus', false)
             }
         }, 300)
     }
