@@ -1,20 +1,23 @@
 <template>
     <div class="information" v-show="$store.state.route?.distanceInMeters">
         <div class="information__distance"> {{ Math.round($store.state.route.distanceInMeters) }} м </div>
-        <div class="information__time"> {{ Math.round($store.state.route.timeInMinutes) }}
-            мин
-            <!--            <i class="fa-regular fa-clock"></i> -->
-        </div>
-        <button @click="deleteRoute" class="information__delete"><i class="fa-solid fa-trash"></i></button>
+        <div class="information__time"> {{ Math.round($store.state.route.timeInMinutes) }} мин </div>
+        <button @click="deleteRoute" class="information__delete">
+            <img src="@/assets/img/trash.svg" alt="">
+        </button>
     </div>
     <div class="controls" :class="{ 'controls_options': showOptions, 'controls_search': showSearch, 'controls_circle': routeType === 'circle' }">
         <div class="suggestions">
             <div class="suggest" v-for="suggest in suggestions" @click="selectSuggest(suggest)">{{ suggest }}</div>
         </div>
         <div class="controls__desk">
-            <button class="controls__nav controls__icon" @click="geolocate"><i class="fa-solid fa-location-arrow"></i></button>
+            <button class="controls__nav controls__icon" @click="geolocate">
+                <img src="@/assets/img/location-arrow.svg" alt="">
+            </button>
             <input type="text" class="controls__search" placeholder="Поиск" v-model="query" @focus="openSearch('query')" @blur="closeSearch" @input="loadSuggestions(this.query)">
-            <button class="controls__settings controls__icon" :class="{ 'controls__settings_active': showOptions }" @click="toggleOptions"><i class="fa-solid fa-gear"></i></button>
+            <button class="controls__settings controls__icon" :class="{ 'controls__settings_active': showOptions }" @click="toggleOptions">
+                <img src="@/assets/img/gear.svg" alt="">
+            </button>
         </div>
         <div class="controls__info">
             <div class="search">
@@ -172,15 +175,20 @@ export default {
     place-self: flex-end;
 }
 
+.information__delete img {
+    width: 16px;
+}
+
 .information__time i {
     margin-left: 4px;
 }
 
 .controls {
+    max-width: 600px;
     position: fixed;
     bottom: 24px;
-    left: 16px;
-    right: 16px;
+    width: 100%;
+    padding: 0 16px;
     transition: transform .3s;
     transform: translateY(64px);
 }
@@ -248,14 +256,14 @@ export default {
     align-items: center;
 }
 
-.controls__icon {
+.controls__icon img {
     height: 100%;
-    font-size: 18px;
+    width: 18px;
     color: #aeaeae;
     outline: none;
 }
 
-.controls__icon:hover {
+.controls__icon img:hover {
     color: #3887be;
 }
 
