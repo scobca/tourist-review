@@ -6,10 +6,7 @@ export default createStore({
       token: localStorage.getItem('token'),
       menu: false,
       poi: {},
-      route: {
-        distanceInMeters: 100,
-        timeInMinutes: 60
-      }
+      route: {}
     }
   },
   getters: {

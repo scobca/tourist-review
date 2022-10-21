@@ -148,11 +148,13 @@ export default {
 }
 
 .information__delete {
+    justify-self: flex-end;
     align-self: flex-end;
+    place-self: flex-end;
 }
 
 .information__time i {
-    margin-left: 8px;
+    margin-left: 4px;
 }
 
 .controls {
