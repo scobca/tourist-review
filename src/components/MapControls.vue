@@ -1,5 +1,12 @@
 <template>
-    <div class="controls" :class="{ 'controls_options': showOptions, 'controls_search': showSearch }">
+    <button @click="Map.deleteRoute" class="delete">
+        <i class="fa-solid fa-trash"></i>
+    </button>
+    <div class="information" v-show="Object.keys(buildedRoute).length">
+        <div class="information__distance"> {{ Math.round(buildedRoute.distanceInMeters) }} метров </div>
+        <div class="information__time"> {{ Math.round(buildedRoute.timeInMinutes) }} минут </div>
+    </div>
+    <div class="controls" :class="{ 'controls_options': showOptions, 'controls_search': showSearch, 'controls_circle': routeType === 'circle' }">
         <div class="suggestions">
             <div class="suggest" v-for="suggest in suggestions" @click="selectSuggest(suggest)">{{ suggest }}</div>
         </div>
@@ -28,11 +35,15 @@
                 <form action="#" class="options__type">
                     <span class="options__title">Вид маршрута</span>
                     <div class="options__type-wrap">
-                        <input id="direct" name="city" value="direct" type="radio" v-model="routeType" class="options__input">
+                        <input id="direct" name="city" value="direct" type="radio" v-model="routeType" class="options__input" @change="buildRoute">
                         <label for="direct" class="options__label"> Прямой </label>
-                        <input id="circle" name="city" value="circle" type="radio" v-model="routeType" class="options__input">
+                        <input id="circle" name="city" value="circle" type="radio" v-model="routeType" class="options__input" @change="buildRoute">
                         <label for="circle" class="options__label"> Круговой </label>
                     </div>
+                </form>
+                <form action="#" class="options__minutes" v-show="routeType === 'circle'">
+                    <span class="options__title">Продолжительность</span>
+                    <input type="range" v-model="minutes" min="30" max="120" step="30" class="options__range" @change="buildRoute">
                 </form>
             </div>
         </div>
@@ -50,6 +61,7 @@ export default {
     components: {ModalLoader},
     data() {
         return {
+            buildedRoute: {},
             showOptions: false,
             showSearch: false,
             query: '',
@@ -58,16 +70,20 @@ export default {
             suggestions: [],
             currentField: '',
             ratio: .5,
-            routeType: 'direct'
+            routeType: 'direct',
+            minutes: 60
         }
     },
     methods: {
-        buildRoute() {
-            if (this.query && this.departure) {
-                if (this.departure === 'Моё местоположение') {
-                    MapModel.buildRoute(this.query, MapModel.userGeolocation, this.city, this.ratio)
-                } else {
-                    MapModel.buildRoute(this.query, this.departure, this.city, this.ratio)
+        async buildRoute() {
+            if (this.departure) {
+                console.log(this.routeType, this.routeType === 'circle')
+                if ((this.routeType === 'direct' && this.query) || this.routeType === 'circle' ) {
+                    if (this.departure === 'Моё местоположение') {
+                        this.buildedRoute = await MapModel.buildRoute(this.query, MapModel.userGeolocation, this.city, this.ratio, this.routeType, this.minutes   )
+                    } else {
+                        this.buildedRoute = await MapModel.buildRoute(this.query, this.departure, this.city, this.ratio, this.routeType, this.minutes )
+                    }
                 }
             }
         },
@@ -104,6 +120,41 @@ export default {
 
 <style scoped>
 
+.delete {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    font-size: 18px;
+}
+
+.controls__build {
+    display: inline-block;
+    background: #3887be;
+    border-radius: 12px;
+}
+
+.information {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+}
+
+.information__distance,
+.information__time {
+    background: white;
+    padding: 16px 32px;
+    border-radius: 8px;
+    text-align: center;
+    color: #222;
+    font-family: "Open Sans";
+}
+
 .controls {
     position: fixed;
     bottom: 24px;
@@ -113,8 +164,13 @@ export default {
     transform: translateY(64px);
 }
 
+.controls__settings {
+    transition: 1   s;
+}
+
 .controls__settings_active {
     color: #3887be !important;
+    transform: rotateZ(180deg);
 }
 
 .options, .search {
@@ -126,8 +182,13 @@ export default {
     height: 56px;
 }
 
+
 .controls_options {
     transform: translateY(-160px);
+}
+
+.controls_options.controls_circle {
+    transform: translateY(-230px);
 }
 
 .controls_options .search {
@@ -170,6 +231,7 @@ export default {
     height: 100%;
     font-size: 18px;
     color: #aeaeae;
+    outline: none;
 }
 
 .controls__icon:hover {
@@ -306,7 +368,8 @@ export default {
     color: #858585;
 }
 
-.options__ratio {
+.options__ratio,
+.options__minutes {
     border-bottom: 1px solid #ededed;
     display: flex;
     justify-content: center;
@@ -318,6 +381,7 @@ export default {
     height: 56px;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid #ededed;
 }
 
 </style>

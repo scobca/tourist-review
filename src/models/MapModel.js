@@ -2,6 +2,7 @@ import BaseModel from "@/models/BaseModel";
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
 import PlaceModel from "@/models/PlaceModel";
 import store from "@/store";
+import _ from "lodash";
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoia29zYWt1cmEiLCJhIjoiY2p4eDR4am8yMDk3czNicGo4dmVmbDE2OSJ9.0eys6-WKigotzfUlrhoLLA';
 
@@ -11,6 +12,7 @@ class MapModel {
 
     static abort = new AbortController
 
+    static loc = 'kzn'
     static ratio = .5
     static filters = [
         "TOURISM",
@@ -56,7 +58,7 @@ class MapModel {
         this.map.addControl(this.geolocateControls);
 
         this.geolocateControls.on('geolocate', function(e) {
-            // if (MapModel.currentRoute) MapModel.buildRoute()
+            if (MapModel.currentRoute) MapModel.rebuildRoute();
             const lon = e.coords.longitude;
             const lat = e.coords.latitude
             MapModel.userGeolocation = `${lat}, ${lon}`;
@@ -70,11 +72,11 @@ class MapModel {
 
     }
 
-    static async buildRoute(destination=this.currentRoute, departure='', loc='spb', ratio=this.ratio) {
+    static async buildRoute(destination=this.currentRoute, departure=this.userGeolocation, loc='spb', ratio=this.ratio, type='direct', minutes=60) {
 
         MapModel.currentRoute = destination;
 
-        const body = {
+        const body = type === 'direct' ? {
             loc,
             ratio,
             points: [
@@ -82,15 +84,40 @@ class MapModel {
                 departure ?? this.userGeolocation,
             ],
             filters: this.filters,
+        } : {
+            loc,
+            minutes,
+            from: departure ?? this.userGeolocation,
+            filters: this.filters
         }
 
-        const data = await BaseModel.request('map/route', { body, signal: this.abort.signal  })
+        const route = type === 'direct' ? 'map/route' : 'map/route/circle'
+
+        const data = await BaseModel.request(route, { body, signal: this.abort.signal  })
+
+        this.renderRoute(data)
+
+        return data;
+
+    }
+
+    static rebuildRoute = _.throttle(MapModel.buildRoute, 30000);
+
+    static deleteRoute() {
+        this.abort.abort();
+        this.abort = new AbortController();
+        if (this.map.getLayer('route')) this.map.removeLayer('route')
+        if (this.map.getLayer('routeline-active')) this.map.removeLayer('routeline-active')
+        if (this.map.getSource('route')) this.map.removeSource('route')
+        this.currentRoute = '';
+    }
+
+    static renderRoute(data) {
 
         if (!data.latLonPoints) return false;
 
-        if (this.markers.length) {
-            this.markers.forEach(marker => marker.remove())
-        }
+        if (this.markers.length) this.markers.forEach(marker => marker.remove())
+
 
         const coords = data.latLonPoints.map(item => item.reverse())
 
@@ -104,6 +131,7 @@ class MapModel {
         }
 
         data.sightAreas.forEach(area => {
+            if (area.name === 'fountain') return false;
             const marker = new mapboxgl.Marker({
                 color: "#FFFFFF",
                 draggable: false
@@ -164,20 +192,9 @@ class MapModel {
         }
 
         this.map.flyTo({
-            center: coords[0]
+            center: coords[coords.length-1]
         })
 
-        return true;
-
-    }
-
-    static deleteRoute() {
-        this.abort.abort();
-        this.abort = new AbortController();
-        if (this.map.getLayer('route')) this.map.removeLayer('route')
-        if (this.map.getLayer('routeline-active')) this.map.removeLayer('routeline-active')
-        if (this.map.getSource('route')) this.map.removeSource('route')
-        this.currentRoute = '';
     }
 
 }

@@ -4,7 +4,7 @@
 
         <h3 class="poi__title">
             {{ $store.state.poi.name }}
-            <span class="poi__type"> {{ $store.state.poi.type }} </span>
+<!--            <span class="poi__type"> {{ $store.state.poi.type }} </span>-->
         </h3>
 
         <img :src="$store.state.poi?.imageLink" alt="" class="poi__image" v-show="$store.state.poi.imageLink">
@@ -37,9 +37,9 @@ export default {
     border-radius: 16px;
     background: white;
     position: fixed;
-    inset: 16px;
+    left: 16px;
+    right: 16px;
     top: 80px;
-    bottom: 160px;
     padding: 24px;
     font-family: "Open Sans", sans-serif;
 }
@@ -51,6 +51,13 @@ export default {
 .poi__type {
     font-size: 14px;
     color: #858585;
+}
+
+.poi__image {
+    margin-top: 16px;
+    width: 100%;
+    border-radius: 16px;
+
 }
 
 .poi__close {

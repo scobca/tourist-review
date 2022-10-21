@@ -74,6 +74,10 @@ q:before, q:after {
     opacity: 0  ;
 }
 
+input {
+    outline: none;
+}
+
 #app {
     display: flex;
     flex-direction: column;
