@@ -7,6 +7,7 @@ export default createStore({
       menu: false,
       poi: {},
       route: {},
+      city: 'kzn', // msk, spb, kzn
       dataLoading: false,
     }
   },
@@ -30,6 +31,9 @@ export default createStore({
     },
     setLoadingStatus(state, status) {
       state.dataLoading = status
+    },
+    setCity(state, city) {
+      state.city = city;
     }
   },
   actions: {

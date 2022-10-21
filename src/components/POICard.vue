@@ -4,7 +4,6 @@
 
         <h3 class="poi__title">
             {{ $store.state.poi.name }}
-<!--            <span class="poi__type"> {{ $store.state.poi.type }} </span>-->
         </h3>
 
         <img :src="$store.state.poi?.imageLink" alt="" class="poi__image" v-show="$store.state.poi.imageLink">
@@ -15,6 +14,7 @@
 <script>
 
 import store from "@/store";
+import PlaceModel from "@/models/PlaceModel";
 
 export default {
     name: "POICard",
@@ -57,7 +57,8 @@ export default {
     margin-top: 16px;
     width: 100%;
     border-radius: 16px;
-
+    max-height: 400px;
+    object-fit: contain;
 }
 
 .poi__close {

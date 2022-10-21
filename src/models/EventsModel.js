@@ -1,12 +1,13 @@
 import BaseModel from "@/models/BaseModel";
+import store from "@/store";
 
 class EventsModel {
     static async day() {
         return await BaseModel.request('event/day');
     }
-    static async search(q, loc='spb', lang='ru') {
+    static async search(q) {
         return await BaseModel.request('event/search?' + new URLSearchParams({
-            q, loc, lang
+            q, loc: store.state.city, lang: 'ru'
         }))
     }
     static async getEvent(id) {

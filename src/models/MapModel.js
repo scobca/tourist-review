@@ -2,6 +2,7 @@ import BaseModel from "@/models/BaseModel";
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
 import store from "@/store";
 import _ from "lodash";
+import PlaceModel from "@/models/PlaceModel";
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoia29zYWt1cmEiLCJhIjoiY2p4eDR4am8yMDk3czNicGo4dmVmbDE2OSJ9.0eys6-WKigotzfUlrhoLLA';
 
@@ -11,7 +12,6 @@ class MapModel {
 
     static abort = new AbortController
 
-    static loc = 'kzn'
     static ratio = .5
     static filters = [
         "TOURISM",
@@ -71,12 +71,12 @@ class MapModel {
 
     }
 
-    static async buildRoute(destination=this.currentRoute, departure=this.userGeolocation, loc='spb', ratio=this.ratio, type='direct', minutes=60) {
+    static async buildRoute(destination=this.currentRoute, departure=this.userGeolocation, ratio=this.ratio, type='direct', minutes=60) {
 
         MapModel.currentRoute = destination;
 
         const body = type === 'direct' ? {
-            loc,
+            loc: store.state.city,
             ratio,
             points: [
                 destination,
@@ -84,7 +84,7 @@ class MapModel {
             ],
             filters: this.filters,
         } : {
-            loc,
+            loc: store.state.city,
             minutes,
             from: departure ?? this.userGeolocation,
             filters: this.filters
@@ -138,7 +138,8 @@ class MapModel {
                 color: "#FFFFFF",
                 draggable: false
             }).setLngLat(area.centroid.reverse()).addTo(this.map);
-            marker.getElement().addEventListener('click', function () {
+            marker.getElement().addEventListener('click', async function () {
+                area.wiki = await PlaceModel.wiki(area.name);
                 store.commit('setPoi', area)
             });
             MapModel.markers.push(marker);

@@ -35,9 +35,9 @@
                 <form action="#" class="options__type">
                     <span class="options__title">Вид маршрута</span>
                     <div class="options__type-wrap">
-                        <input id="direct" name="city" value="direct" type="radio" v-model="routeType" class="options__input" @change="buildRoute">
+                        <input id="direct" name="city" value="direct" type="radio" v-model="routeType" @change="buildRoute" class="options__input">
                         <label for="direct" class="options__label"> Прямой </label>
-                        <input id="circle" name="city" value="circle" type="radio" v-model="routeType" class="options__input" @change="buildRoute">
+                        <input id="circle" name="city" value="circle" type="radio" v-model="routeType" @change="buildRoute" class="options__input">
                         <label for="circle" class="options__label"> Круговой </label>
                     </div>
                 </form>
@@ -81,6 +81,11 @@ export default {
     },
     watch: {
         city(newCity, oldCity) {
+            this.query = '';
+            this.departure = '';
+            this.suggestions = [];
+            this.deleteRoute();
+            store.commit('setCity', newCity);
             MapModel.map.flyTo({
                 center: this.city === 'msk' ? [37.617698, 55.755864] : this.city === 'spb' ? [30.315877, 59.939099] : [49.106414, 55.796127],
                 zoom: 10
@@ -91,11 +96,12 @@ export default {
         async buildRoute() {
             if (this.departure) {
                 if ((this.routeType === 'direct' && this.query) || this.routeType === 'circle' ) {
+                    this.suggestions = []
                     store.commit('setLoadingStatus', true)
                     if (this.departure === 'Моё местоположение') {
-                        this.buildedRoute = await MapModel.buildRoute(this.query, MapModel.userGeolocation, this.city, this.ratio, this.routeType, this.minutes   )
+                        this.buildedRoute = await MapModel.buildRoute(this.query, MapModel.userGeolocation, this.ratio, this.routeType, this.minutes   )
                     } else {
-                        this.buildedRoute = await MapModel.buildRoute(this.query, this.departure, this.city, this.ratio, this.routeType, this.minutes )
+                        this.buildedRoute = await MapModel.buildRoute(this.query, this.departure, this.ratio, this.routeType, this.minutes )
                     }
                     store.commit('setLoadingStatus', false)
                 }
@@ -120,6 +126,7 @@ export default {
         },
         selectSuggest(suggest) {
             this.suggestions = [];
+            console.log(suggest, this.currentField)
             this[this.currentField] = suggest;
             if (this.currentField === 'query') this.$refs.fromInput.focus()
             this.buildRoute();
@@ -128,7 +135,7 @@ export default {
             if (query.length < 3) this.suggestions = []
             else {
                 store.commit('setLoadingStatus', true)
-                this.suggestions = (await PlaceModel.search(query, this.city)).suggestions.slice(0, 2);
+                this.suggestions = (await PlaceModel.search(query)).suggestions.slice(0, 2);
                 this.suggestions.push('Моё местоположение')
                 store.commit('setLoadingStatus', false)
             }
@@ -148,7 +155,7 @@ export default {
 
 .information {
     position: fixed;
-    top: 16px;
+    top: 24px;
     left: 16px;
     right: 16px;
     display: flex;
@@ -161,6 +168,7 @@ export default {
 .information__delete,
 .information__distance,
 .information__time {
+    height: 40px;
     background: white;
     padding: 12px 24px;
     border-radius: 8px;
