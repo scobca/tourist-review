@@ -32,10 +32,6 @@
                     <input id="kzn" name="city" value="kzn" type="radio" v-model="city" class="options__input">
                     <label for="kzn" class="options__label">Казань</label>
                 </form>
-                <form action="#" class="options__ratio">
-                    <span class="options__title">Кол-во интересных мест</span>
-                    <input type="range" v-model="ratio" min="0" max="1.5" step=".5" class="options__range" @change="buildRoute">
-                </form>
                 <form action="#" class="options__type">
                     <span class="options__title">Вид маршрута</span>
                     <div class="options__type-wrap">
@@ -44,6 +40,10 @@
                         <input id="circle" name="city" value="circle" type="radio" v-model="routeType" class="options__input" @change="buildRoute">
                         <label for="circle" class="options__label"> Круговой </label>
                     </div>
+                </form>
+                <form action="#" class="options__ratio" v-show="routeType === 'direct'">
+                    <span class="options__title">Кол-во интересных мест</span>
+                    <input type="range" v-model="ratio" min="0" max="1.5" step=".5" class="options__range" @change="buildRoute">
                 </form>
                 <form action="#" class="options__minutes" v-show="routeType === 'circle'">
                     <span class="options__title">Продолжительность</span>
@@ -214,10 +214,6 @@ export default {
 
 .controls_options {
     transform: translateY(-160px);
-}
-
-.controls_options.controls_circle {
-    transform: translateY(-230px);
 }
 
 .controls_options .search {
