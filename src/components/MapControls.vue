@@ -1,5 +1,5 @@
 <template>
-    <div class="information" v-show="Object.keys($store.state.route).length">
+    <div class="information" v-show="$store.state.route?.distanceInMeters">
         <div class="information__distance"> {{ Math.round($store.state.route.distanceInMeters) }} м </div>
         <div class="information__time"> {{ Math.round($store.state.route.timeInMinutes) }}
             мин
@@ -186,7 +186,7 @@ export default {
 }
 
 .controls__settings {
-    transition: 1   s;
+    transition: 1s;
 }
 
 .controls__settings_active {
