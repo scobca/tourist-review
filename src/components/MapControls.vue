@@ -1,10 +1,8 @@
 <template>
-    <button @click="Map.deleteRoute" class="delete">
-        <i class="fa-solid fa-trash"></i>
-    </button>
-    <div class="information" v-show="Object.keys(buildedRoute).length">
-        <div class="information__distance"> {{ Math.round(buildedRoute.distanceInMeters) }} метров </div>
-        <div class="information__time"> {{ Math.round(buildedRoute.timeInMinutes) }} минут </div>
+    <div class="information" v-show="Object.keys($store.state.route).length">
+        <div class="information__distance"> {{ Math.round($store.state.route.distanceInMeters) }} м </div>
+        <div class="information__time"> {{ Math.round($store.state.route.timeInMinutes) }} <i class="fa-regular fa-clock"></i> </div>
+        <button @click="Map.deleteRoute" class="information__delete"><i class="fa-solid fa-trash"></i></button>
     </div>
     <div class="controls" :class="{ 'controls_options': showOptions, 'controls_search': showSearch, 'controls_circle': routeType === 'circle' }">
         <div class="suggestions">
@@ -77,7 +75,6 @@ export default {
     methods: {
         async buildRoute() {
             if (this.departure) {
-                console.log(this.routeType, this.routeType === 'circle')
                 if ((this.routeType === 'direct' && this.query) || this.routeType === 'circle' ) {
                     if (this.departure === 'Моё местоположение') {
                         this.buildedRoute = await MapModel.buildRoute(this.query, MapModel.userGeolocation, this.city, this.ratio, this.routeType, this.minutes   )
@@ -120,12 +117,6 @@ export default {
 
 <style scoped>
 
-.delete {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    font-size: 18px;
-}
 
 .controls__build {
     display: inline-block;
@@ -145,14 +136,23 @@ export default {
     gap: 8px;
 }
 
+.information__delete,
 .information__distance,
 .information__time {
     background: white;
-    padding: 16px 32px;
+    padding: 12px 24px;
     border-radius: 8px;
     text-align: center;
     color: #222;
     font-family: "Open Sans";
+}
+
+.information__delete {
+    align-self: flex-end;
+}
+
+.information__time i {
+    margin-left: 8px;
 }
 
 .controls {
@@ -354,7 +354,7 @@ export default {
 }
 
 .suggest:hover {
-        color: #3887be;
+    color: #3887be;
 }
 
 .options__title {

@@ -5,7 +5,11 @@ export default createStore({
     return {
       token: localStorage.getItem('token'),
       menu: false,
-      poi: {}
+      poi: {},
+      route: {
+        distanceInMeters: 100,
+        timeInMinutes: 60
+      }
     }
   },
   getters: {
@@ -22,6 +26,9 @@ export default createStore({
     },
     setPoi(state, area) {
       state.poi = area
+    },
+    updateRoute(state, route) {
+      state.route = route;
     }
   },
   actions: {

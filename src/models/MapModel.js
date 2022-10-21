@@ -97,6 +97,8 @@ class MapModel {
 
         this.renderRoute(data)
 
+        store.commit('updateRoute', data);
+
         return data;
 
     }
@@ -110,6 +112,7 @@ class MapModel {
         if (this.map.getLayer('routeline-active')) this.map.removeLayer('routeline-active')
         if (this.map.getSource('route')) this.map.removeSource('route')
         this.currentRoute = '';
+        store.state.route = {};
     }
 
     static renderRoute(data) {
