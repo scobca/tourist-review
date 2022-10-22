@@ -1,21 +1,15 @@
 <template>
-    <section class="day-event" >
-        <div class="day-event__container container">
+    <section class="event" v-show="event.event">
+        <div class="event__container container">
 
-            <h2 class="day-event__title">
+            <h2 class="event__title">
                 <img src="@/assets/img/fire.svg" alt="" class="recommendations__icon" >
                 Событие дня
             </h2>
 
-            <div class="day-event__info">
-                <div class="day-event__card" @click="openEvent">
-                    <img :src="this?.event?.event?.images[0]?.image" alt="" class=day-event__image>
-                    <div class="day-event__about">
-                        <h3 class="day-event__subtitle"> {{ this.event?.event?.title }} </h3>
-                        <p class="day-event__description" v-html="this.event?.event?.description"></p>
-<!--                        <button class="btn day-event__map" @click="openEvent"> На карту </button>-->
-                    </div>
-                </div>
+            <div class="event__card" @click="openEvent">
+                <img :src="event?.event?.images[0]?.image" class="event__image">
+                <h3 class="event__subtitle"> {{ event?.event?.title }} </h3>
             </div>
 
         </div>
@@ -25,6 +19,7 @@
 <script>
 import EventsModel from "@/models/EventsModel";
 import router from "@/router";
+import store from "@/store";
 
 export default {
     name: "DayEvent",
@@ -38,10 +33,8 @@ export default {
     },
     methods: {
         openEvent() {
-            router.push({
-                name: 'map',
-                query: { place: this.event.place?.id }
-            })
+            store.commit('setOpenPlace', this.event.place.coords)
+            router.push({ name: 'map' })
         }
     }
 }
@@ -49,111 +42,53 @@ export default {
 
 <style scoped>
 
-.day-event__container {
-    padding-top: 120px;
-    padding-bottom: 80px;
-
+.event {
+    margin-top: 140px;
 }
 
-.day-event__card {
-    background: #ededed;
-    border-radius: 16px;
-    display: grid;
+.event__card {
     cursor: pointer;
-    grid-template-columns: 3fr 5fr;
+    padding: 24px;
+    position: relative;
+    width: 100%;
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #dedede;
+    border-radius: 16px;
+    overflow: hidden;
 }
 
-.day-event__title {
+.event__image {
+    position: absolute;
+    border: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+    filter: brightness(60%);
+    transition: all .3s;
+}
+
+.event__title {
+    margin-bottom: 16px;
     font-size: 22px;
 }
 
-.day-event__image {
-    border-radius: 16px;
-    height: 300px;
-    cursor: pointer;
-    aspect-ratio: 1;
-    object-fit: cover;
-    background: #ededed;
+.event__subtitle {
+    z-index: 10;
+    font-family: IMBPlex, "Open Sans", sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.4em;
+    letter-spacing: 0em;
+    text-align: left;
+    color: white;
 }
 
-.day-event__info {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: stretch;
-    gap: 32px;
-}
-
-.day-event__about {
-    position: relative;
-    height: 100%;
-    padding: 16px;
-}
-
-.day-event__map {
-    margin-top: 16px;
-    background: transparent;
-    color: var(--accent);
-    border: 1px solid var(--accent)
-}
-
-.day-event__subtitle {
-    font-size: 32px;
-    margin-bottom: 16px;
-}
-
-.day-event__subtitle::first-letter {
+.event__subtitle::first-letter {
     text-transform: uppercase;
 }
-
-.day-event__description {
-    font-size: 18px;
-    line-height: 1.4em;
-}
-
-.recommendations__icon {
-    width: 22px;
-    margin-right: 8px;
-    transform: translateY(20%);
-}
-
-
-@media screen and (max-width: 1150px) {
-    .day-event__info {
-        padding-top: 32px;
-        flex-direction: column;
-    }
-    .day-event__image {
-        width: 100%;
-        height: auto;
-    }
-
-}
-
-
-@media screen and (min-width: 1150px) {
-    .day-event__title {
-        font-size: 36px;
-        margin-bottom: 32px;
-    }
-    .recommendations__icon {
-        width: 32px;
-    }
-    .day-event__info {
-        padding-top: 32px;
-        flex-direction: row;
-    }
-    .day-event__card {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: white;
-        gap: 32px
-    }
-    .day-event__about {
-        padding: 0;
-    }
-}
-
 
 </style>

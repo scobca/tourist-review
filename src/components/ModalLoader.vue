@@ -71,7 +71,7 @@ export default {
 .overlay {
     position: fixed;
     inset: 0;
-    backdrop-filter: brightness(100%);
+    backdrop-filter: brightness(50%);
     display: flex;
     justify-content: center;
     align-items: center;

@@ -62,6 +62,7 @@ export default {
 @font-face {
     font-family: 'Open Sans';
     src: url("@/assets/fonts/Open_Sans/static/OpenSans/OpenSans-Regular.ttf");
+    font-display: swap;
 }
 
 .header {

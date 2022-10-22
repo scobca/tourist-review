@@ -9,6 +9,7 @@ export default createStore({
       route: {},
       city: 'kzn', // msk, spb, kzn
       dataLoading: false,
+      openPlace: null
     }
   },
   getters: {
@@ -34,6 +35,9 @@ export default createStore({
     },
     setCity(state, city) {
       state.city = city;
+    },
+    setOpenPlace(state, place) {
+      state.openPlace = place
     }
   },
   actions: {

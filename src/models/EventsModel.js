@@ -3,7 +3,7 @@ import store from "@/store";
 
 class EventsModel {
     static async day() {
-        return await BaseModel.request('event/day');
+        return await BaseModel.request('event/day?' + new URLSearchParams({ loc: store.state.city }));
     }
     static async search(q) {
         return await BaseModel.request('event/search?' + new URLSearchParams({

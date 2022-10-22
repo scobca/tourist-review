@@ -44,7 +44,6 @@ class MapModel {
             projection: 'globe'
         });
 
-
         this.geolocateControls = new mapboxgl.GeolocateControl({
             positionOptions: {
                 enableHighAccuracy: true
@@ -61,13 +60,17 @@ class MapModel {
             const lon = e.coords.longitude;
             const lat = e.coords.latitude
             MapModel.userGeolocation = `${lat}, ${lon}`;
+            if (store.state.openPlace) {
+                MapModel.buildRoute(`${store.state.openPlace.lon}, ${store.state.openPlace.lat}`);
+                store.commit('setOpenPlace', null);
+            }
         });
 
         this.map.on('load', () => {
             document.querySelector('.mapboxgl-ctrl-geolocate').style.display = 'none';
-            document.querySelector('.mapboxgl-ctrl-bottom-left').style.display = 'none'
+            document.querySelector('.mapboxgl-ctrl-bottom-left').style.display = 'none';
             this.geolocateControls.trigger();
-        })
+        });
 
     }
 

@@ -27,6 +27,7 @@
 <script>
 import EventsModel from "@/models/EventsModel";
 import router from "@/router";
+import store from "@/store";
 
 export default {
     name: "EventSearch",
@@ -38,14 +39,13 @@ export default {
     methods: {
         async search(e) {
             if (e.target.value.length >= 3) {
-                this.events = await EventsModel.search(e.target.value);
+                this.events = (await EventsModel.search(e.target.value)).slice(0, 6);
             }
         },
         openEvent(place, event) {
-            router.push({
-                name: 'map',
-                query: { place: place.place?.id }
-            })
+            console.log(place)
+            store.commit('setOpenPlace', event.place.coords);
+            router.push({ name: 'map' })
         }
     }
 }
@@ -82,20 +82,23 @@ export default {
     width: 100%;
     background: #ededed;
     border-radius: 16px;
-    display: grid;
     cursor: pointer;
-    grid-template-columns: 3fr 5fr;
+    height: 140px;
     overflow: hidden;
-    height: min-content ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .event__image {
+    position: absolute;
     width: 100%;
     aspect-ratio: 1;
     border-radius: 16px;
     object-fit: cover;
     cursor: pointer;
     height: 100%;
+    filter: brightness(60%);
 }
 
 .event__title {
@@ -104,6 +107,14 @@ export default {
     line-height: 1.1em;
     width: 100%;
     white-space: normal;
+    text-align: center;
+    color: white;
+    z-index: 10;
+    font-family: "Open Sans", sans-serif;
+}
+
+.event__title::first-letter {
+    text-transform: uppercase;
 }
 
 .event__description {
