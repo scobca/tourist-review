@@ -1,4 +1,5 @@
 <template>
+    <div class="error"> {{ $store.state.routeError }} </div>
     <div class="information" v-show="$store.state.route?.distanceInMeters">
         <div class="information__distance"> {{ Math.round($store.state.route.distanceInMeters) }} м </div>
         <div class="information__time"> {{ Math.round($store.state.route.timeInMinutes) }} мин </div>
@@ -123,6 +124,8 @@ export default {
         },
         geolocate() {
             MapModel.geolocateControls.trigger();
+            this.departure = 'Моё местоположение';
+            this.showSearch = true;
         },
         selectSuggest(suggest) {
             this.suggestions = [];
@@ -139,13 +142,26 @@ export default {
                 this.suggestions.push('Моё местоположение')
                 store.commit('setLoadingStatus', false)
             }
-        }, 300)
+        }, 700)
     }
 }
 </script>
 
 <style scoped>
 
+.error {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    top: 24px;
+    height: 40px;
+    z-index: 10;
+    color: red;
+    text-align: center;
+    padding: 8px 16px;
+    margin: 0 auto;
+    pointer-events: none;
+}
 
 .controls__build {
     display: inline-block;

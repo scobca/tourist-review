@@ -9,12 +9,16 @@ export default createStore({
       route: {},
       city: 'kzn', // msk, spb, kzn
       dataLoading: false,
-      openPlace: null
+      openPlace: null,
+      routeError: '',
     }
   },
   getters: {
   },
   mutations: {
+    setRouteError(state, error) {
+      state.routeError = error
+    },
     toggleMenu() {
       this.state.menu = !this.state.menu
     },

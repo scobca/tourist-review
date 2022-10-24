@@ -2,7 +2,7 @@ import store from "@/store";
 
 class BaseModel {
 
-    static baseUrl = 'https://turist-ru-2.herokuapp.com/api/'
+    static baseUrl = 'https://turist-ru-1.herokuapp.com/api/'
 
     static request(route, options={}) {
 

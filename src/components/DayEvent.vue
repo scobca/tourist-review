@@ -73,7 +73,7 @@ export default {
 
 .event__title {
     margin-bottom: 16px;
-    font-size: 22px;
+    font-size: 30px;
 }
 
 .event__subtitle {

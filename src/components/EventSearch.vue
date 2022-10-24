@@ -189,7 +189,7 @@ export default {
     .events__container {
     }
     .events__title{
-        font-size: 36px;
+        font-size: 30px;
 
     }
     .events__icon {

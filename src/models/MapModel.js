@@ -97,11 +97,14 @@ class MapModel {
 
         const data = await BaseModel.request(route, { body, signal: this.abort.signal  })
 
-        this.renderRoute(data)
+        if (data) {
+            this.renderRoute(data)
+            store.commit('updateRoute', data);
+            return data;
+        } else store.commit('setRouteError', 'Невозможно построить путь')
 
-        store.commit('updateRoute', data);
 
-        return data;
+
 
     }
 
