@@ -38,7 +38,7 @@ class MapModel {
             antialias: true,
             pitch: 60,
             bearing: 150,
-            style: 'mapbox://styles/kosakura/cl9bpvqqr002n15nlxbmrsmdm?optimize=true', // Specify which map style to use?
+            style: 'https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css', // Specify which map style to use?
             center: [30.315644, 59.938955], // Specify the starting position
             zoom: 1, // Specify the starting zoom,
             projection: 'globe'
